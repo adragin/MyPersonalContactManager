@@ -1,5 +1,6 @@
 package com.example.MyPersonalContactManager.model;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,9 +13,11 @@ import java.util.UUID;
 @Setter
 public class Contact {
     private String id;
+    @NotBlank
     private String firstName;
     private String lastName;
     private String email;
+    @NotBlank
     private String phone;
     private Date birthday;
     private String address;

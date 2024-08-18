@@ -18,8 +18,8 @@ public class ContactController {
     private DatabaseContactService dbService = new DatabaseContactService();
 
 
-    @PostMapping("/createContact")
-    public ResponseEntity<ResponseAPI> crateContact(@Valid @RequestBody  RequestBodyClient requestBodyClient) {
+    @PostMapping(value = "/createContact", consumes = "application/json")
+    public ResponseEntity<ResponseAPI> crateContact(@Valid @RequestBody RequestBodyClient requestBodyClient) {
         responseAPI  = new ResponseAPI();
 
         Contact contact = dbService.createContact(requestBodyClient.contact);
