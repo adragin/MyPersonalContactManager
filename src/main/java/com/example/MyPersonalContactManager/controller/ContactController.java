@@ -15,7 +15,8 @@ public class ContactController {
 
     private ResponseAPI responseAPI;
 
-    private DatabaseContactService dbService = new DatabaseContactService();
+    @Autowired
+    private DatabaseContactService dbService;
 
 
     @PostMapping(value = "/createContact", consumes = "application/json")

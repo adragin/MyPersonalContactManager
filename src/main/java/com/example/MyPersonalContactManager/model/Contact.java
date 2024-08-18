@@ -1,5 +1,6 @@
 package com.example.MyPersonalContactManager.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,15 +20,18 @@ public class Contact {
     private String email;
     @NotBlank
     private String phone;
-    private Date birthday;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime birthday;
     private String address;
     private URL photo;
     private LocalDateTime createDate;
 
-//    public Contact() {
-//    }
+    public Contact() {
+        this.id = String.valueOf(UUID.randomUUID());
+        this.createDate = LocalDateTime.now();
+    }
 
-    public Contact(String firstName, String lastName, String email, String phone, Date birthday,
+    public Contact(String firstName, String lastName, String email, String phone, LocalDateTime birthday,
                    String address, URL photo) {
         this.id = String.valueOf(UUID.randomUUID());
         this.firstName = firstName;
