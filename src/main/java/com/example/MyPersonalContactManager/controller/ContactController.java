@@ -28,13 +28,13 @@ public class ContactController {
         return ResponseEntity.ok(responseAPI);
     }
 
-//    @GetMapping("/getContactById")
-//    public ResponseEntity<ResponseAPI> getContactById(@Valid @RequestBody RequestBodyClient requestBodyClient) {
-//        responseAPI  = new ResponseAPI();
-//
-//        responseAPI.response = requestBodyClient.data;
-//        return ResponseEntity.ok(responseAPI);
-//    }
+    @GetMapping("/contacts/{id}")
+    public ResponseEntity<ResponseAPI> getContactById(@PathVariable String id) {
+        responseAPI  = new ResponseAPI();
+        Contact contact = dbService.getContactById(id);
+        responseAPI.response = contact;
+        return ResponseEntity.ok(responseAPI);
+    }
 
     @GetMapping(value = "/contacts")
     public ResponseEntity<ResponseAPI> getAllContacts() {

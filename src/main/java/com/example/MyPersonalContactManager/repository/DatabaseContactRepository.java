@@ -66,8 +66,9 @@ public class DatabaseContactRepository implements ContactRepositoryInterface <Co
     }
 
     @Override
-    public ContactDTO getContactById(String id) {
-        return null;
+    public Contact getContactById(String id) {
+        String selectSql = "SELECT * FROM MyPersonalCpntactManager_DB WHERE id = ?";
+        return jdbcTemplate.queryForObject(selectSql, contactItemRowMapper, id);
     }
 
     @Override

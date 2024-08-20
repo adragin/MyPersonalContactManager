@@ -21,8 +21,8 @@ public class DatabaseContactService implements  ContactServiceInterface<Contact,
     @Autowired
     private DatabaseContactRepository dbRepository;
     @Override
-    public ContactDTO getContactById(String id) {
-        return null;
+    public Contact getContactById(String id) {
+        return dbRepository.getContactById(id);
     }
 
     @Override
