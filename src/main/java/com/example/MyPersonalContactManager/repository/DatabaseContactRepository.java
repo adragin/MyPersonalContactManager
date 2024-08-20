@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -71,7 +72,11 @@ public class DatabaseContactRepository implements ContactRepositoryInterface <Co
 
     @Override
     public List<Contact> getAllContacts() {
-        return null;
+        String selectSql = "SELECT * FROM MyPersonalCpntactManager_DB";
+        List<Contact> contactList = jdbcTemplate.query(selectSql, contactItemRowMapper);
+
+
+        return contactList.stream().toList();
     }
 
     @Override

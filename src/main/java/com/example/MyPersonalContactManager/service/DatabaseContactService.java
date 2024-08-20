@@ -27,7 +27,7 @@ public class DatabaseContactService implements  ContactServiceInterface<Contact,
 
     @Override
     public List<Contact> getAllContacts() {
-        return null;
+        return dbRepository.getAllContacts().stream().toList();
     }
 
     @Override
