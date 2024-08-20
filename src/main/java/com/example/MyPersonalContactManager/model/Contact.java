@@ -29,7 +29,6 @@ public class Contact {
     @NotBlank
     private String phone;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-//    private String birthday ;
     private LocalDate birthday ;
     private String address;
     private URL photo;

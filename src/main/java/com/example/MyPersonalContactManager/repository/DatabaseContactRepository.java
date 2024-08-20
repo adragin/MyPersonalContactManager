@@ -20,7 +20,7 @@ import java.util.Objects;
 @Repository
 public class DatabaseContactRepository implements ContactRepositoryInterface <Contact, ContactDTO>{
 
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     public DatabaseContactRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -34,7 +34,6 @@ public class DatabaseContactRepository implements ContactRepositoryInterface <Co
         contact.setEmail(rs.getString("Email"));
         contact.setPhone(rs.getString("Phone"));
         contact.setBirthday(rs.getDate("Birth_Day").toLocalDate());
-//        contact.setBirthday(null);
         contact.setAddress(rs.getString("Address"));
         contact.setPhone(rs.getString("Photo"));
         contact.setCreateDate(rs.getTimestamp("Create_Date").toLocalDateTime());
@@ -46,8 +45,6 @@ public class DatabaseContactRepository implements ContactRepositoryInterface <Co
         String sql = "INSERT INTO MyPersonalCpntactManager_DB (id, First_Name, Last_Name, Email, Phone, Birth_Day, " +
                 "Address, Photo, Create_Date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
-//        String s = String.valueOf(contact.getBirthday());
-//        System.out.println(s instanceof String);
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, contact.getId());
@@ -56,7 +53,6 @@ public class DatabaseContactRepository implements ContactRepositoryInterface <Co
             ps.setString(4, contact.getEmail());
             ps.setString(5, contact.getPhone());
             ps.setString(6, String.valueOf(contact.getBirthday()));
-//            ps.setString(6, null);
             ps.setString(7, contact.getAddress());
             ps.setString(8, contact.getPhone());
             ps.setString(9, String.valueOf(contact.getCreateDate()));
