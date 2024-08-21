@@ -2,7 +2,6 @@ package com.example.MyPersonalContactManager.repository;
 
 import com.example.MyPersonalContactManager.model.Contact;
 import com.example.MyPersonalContactManager.model.ContactDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -12,11 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 @Repository
 public class DatabaseContactRepository implements ContactRepositoryInterface <Contact, ContactDTO>{
@@ -43,7 +38,7 @@ public class DatabaseContactRepository implements ContactRepositoryInterface <Co
 
     @Override
     public Contact createContact(Contact contact) {
-        String sql = "INSERT INTO MyPersonalCpntactManager_DB (id, First_Name, Last_Name, Email, Phone, Birth_Day, " +
+        String sql = "INSERT INTO Contacts (id, First_Name, Last_Name, Email, Phone, Birth_Day, " +
                 "Address, Photo, Create_Date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
@@ -60,20 +55,20 @@ public class DatabaseContactRepository implements ContactRepositoryInterface <Co
             return ps;
         }, keyHolder);
 
-        String selectSql = "SELECT * FROM MyPersonalCpntactManager_DB WHERE id = ?";
+        String selectSql = "SELECT * FROM Contacts WHERE id = ?";
         return jdbcTemplate.queryForObject(selectSql, contactItemRowMapper, contact.getId());
 
     }
 
     @Override
     public Contact getContactById(String id) {
-        String selectSql = "SELECT * FROM MyPersonalCpntactManager_DB WHERE id = ?";
+        String selectSql = "SELECT * FROM Contacts WHERE id = ?";
         return jdbcTemplate.queryForObject(selectSql, contactItemRowMapper, id);
     }
 
     @Override
     public List<Contact> getAllContacts() {
-        String selectSql = "SELECT * FROM MyPersonalCpntactManager_DB";
+        String selectSql = "SELECT * FROM Contacts";
         List<Contact> contactList = jdbcTemplate.query(selectSql, contactItemRowMapper);
 
 
