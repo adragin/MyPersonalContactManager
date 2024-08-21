@@ -1,13 +1,17 @@
 package com.example.MyPersonalContactManager.model;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.List;
 import java.util.Objects;
-
 public class RequestBodyClient{
+    @Valid
     public Contact contact;
     public ContactDTO contactDTO;
+
+    public List<Contact> contactList;
 
     public Contact getContact() {
         return contact;

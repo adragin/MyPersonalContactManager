@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class DatabaseContactService implements  ContactServiceInterface<Contact, ContactDTO>{
@@ -19,13 +21,13 @@ public class DatabaseContactService implements  ContactServiceInterface<Contact,
     @Autowired
     private DatabaseContactRepository dbRepository;
     @Override
-    public ContactDTO getContactById(String id) {
-        return null;
+    public Contact getContactById(String id) {
+        return dbRepository.getContactById(id);
     }
 
     @Override
     public List<Contact> getAllContacts() {
-        return null;
+        return dbRepository.getAllContacts().stream().toList();
     }
 
     @Override
