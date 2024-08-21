@@ -1,12 +1,11 @@
-INSERT INTO Contacts (id, First_Name, Last_Name, Email, Phone, Birth_Day, Address, Photo, Create_Date)
-VALUES
-  ('1', 'John', 'Doe', 'johndoe@example.com', '+12125551212', '1980-01-01', 'New York, NY', 'avatar1.jpg', NOW()),
-  ('2', 'Jane', 'Smith', 'janesmith@example.com', '+14155551212', '1985-05-15', 'San Francisco, CA', 'avatar2.jpg', NOW()),
-  ('3', 'Michael', 'Johnson', 'michaeljohnson@example.com', '+13125551212', '1990-11-20', 'Chicago, IL', 'avatar3.jpg', NOW()),
-  ('4', 'David', 'Williams', 'davidwilliams@example.com', '+12025551212', '1995-07-05', 'Washington, DC', 'avatar4.jpg', NOW()),
-  ('5', 'Emily', 'Brown', 'emilybrown@example.com', '+16175551212', '1992-03-10', 'Boston, MA', 'avatar5.jpg', NOW()),
-  ('6', 'Daniel', 'Anderson', 'danielanderson@example.com', '+13105551212', '1988-09-25', 'Los Angeles, CA', 'avatar6.jpg', NOW()),
-  ('7', 'Olivia', 'Taylor', 'oliviataylor@example.com', '+17135551212', '1975-12-31', 'Houston, TX', 'avatar7.jpg', NOW()),
-  ('8', 'James', 'White', 'jameswhite@example.com', '+14045551212', '1998-02-15', 'Atlanta, GA', 'avatar8.jpg', NOW()),
-  ('9', 'Sophia', 'Harris', 'sophiaharris@example.com', '+12135551212', '1983-06-20', 'Los Angeles, CA', 'avatar9.jpg', NOW()),
-  ('10', 'Benjamin', 'Nelson', 'benjaminnelson@example.com', '+17735551212', '1978-08-05', 'Chicago, IL', 'avatar10.jpg', NOW());
+INSERT INTO Contacts (id, First_Name, Last_Name, Email, Phone, Birth_Day, Address, Photo, Create_Date) VALUES
+(UUID(), 'John', 'Doe', 'john.doe@example.com', '1234567890', '1985-04-12', '123 Main St, Springfield', 'john_doe.jpg', NOW()),
+(UUID(), 'Jane', 'Smith', 'jane.smith@example.com', '0987654321', '1990-07-24', '456 Elm St, Metropolis', 'jane_smith.jpg', NOW()),
+(UUID(), 'Alice', 'Johnson', 'alice.johnson@example.com', '2345678901', '1987-01-15', '789 Oak St, Gotham', 'alice_johnson.jpg', NOW()),
+(UUID(), 'Bob', 'Brown', 'bob.brown@example.com', '3456789012', '1992-11-30', '101 Pine St, Star City', 'bob_brown.jpg', NOW()),
+(UUID(), 'Charlie', 'Davis', 'charlie.davis@example.com', '4567890123', '1989-05-21', '202 Cedar St, Central City', 'charlie_davis.jpg', NOW()),
+(UUID(), 'Emily', 'White', 'emily.white@example.com', '5678901234', '1991-12-02', '303 Maple St, Keystone', 'emily_white.jpg', NOW()),
+(UUID(), 'Frank', 'Wilson', 'frank.wilson@example.com', '6789012345', '1988-08-14', '404 Birch St, Smallville', 'frank_wilson.jpg', NOW()),
+(UUID(), 'Grace', 'Miller', 'grace.miller@example.com', '7890123456', '1993-09-10', '505 Walnut St, Atlantis', 'grace_miller.jpg', NOW()),
+(UUID(), 'Henry', 'Moore', 'henry.moore@example.com', '8901234567', '1986-02-19', '606 Ash St, Hub City', 'henry_moore.jpg', NOW()),
+(UUID(), 'Ivy', 'Taylor', 'ivy.taylor@example.com', '9012345678', '1994-06-06', '707 Redwood St, National City', 'ivy_taylor.jpg', NOW());
