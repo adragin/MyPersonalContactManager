@@ -1,4 +1,4 @@
-package com.example.MyPersonalContactManager.model;
+package com.example.MyPersonalContactManager.models.ContactModels;
 
 import com.example.MyPersonalContactManager.utils.Utils;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -41,7 +41,14 @@ public class ContactDTOBig {
     public ContactDTOBig() {
         this.lastUpdateDate = LocalDateTime.now();
     }
-
+    //COPY CODE
+    public LocalDate getBirthday() {
+        Utils utils = new Utils();
+        if (utils.isBirthdayDefault(birthday)) {
+            return null;
+        }
+        return this.birthday;
+    }
     //COPY CODE
     public void setBirthday(LocalDate birthday) {
         Utils utils = new Utils();

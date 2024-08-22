@@ -1,8 +1,7 @@
 package com.example.MyPersonalContactManager.service;
 
-import com.example.MyPersonalContactManager.model.Contact;
-import com.example.MyPersonalContactManager.model.ContactDTOBig;
-import com.example.MyPersonalContactManager.model.ContactDTOShort;
+import com.example.MyPersonalContactManager.models.ContactModels.Contact;
+import com.example.MyPersonalContactManager.models.ContactModels.ContactDTOBig;
 import com.example.MyPersonalContactManager.repository.DatabaseContactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

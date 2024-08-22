@@ -1,6 +1,4 @@
-package com.example.MyPersonalContactManager.model;
-
-import java.util.Objects;
+package com.example.MyPersonalContactManager.models.RequestResponseModels;
 
 public class ResponseAPI{
     public Object response;
