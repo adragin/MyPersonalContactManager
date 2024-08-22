@@ -1,6 +1,7 @@
 package com.example.MyPersonalContactManager.controller;
 
 import com.example.MyPersonalContactManager.model.Contact;
+import com.example.MyPersonalContactManager.model.ContactDTOBig;
 import com.example.MyPersonalContactManager.model.RequestBodyClient;
 import com.example.MyPersonalContactManager.model.ResponseAPI;
 import com.example.MyPersonalContactManager.service.DatabaseContactService;
@@ -40,6 +41,14 @@ public class ContactController {
     public ResponseEntity<ResponseAPI> getAllContacts() {
         responseAPI  = new ResponseAPI();
         responseAPI.response = dbService.getAllContacts().toArray();
+        return ResponseEntity.ok(responseAPI);
+    }
+
+    @PutMapping(value = "/updateContact")
+    public ResponseEntity<ResponseAPI> updateContact(@PathVariable String id, @RequestBody RequestBodyClient requestBodyClient) {
+        responseAPI = new ResponseAPI<>();
+        ContactDTOBig contactDTOBig = dbService.updateContact(id, requestBodyClient.contactDTOBig);
+        responseAPI.response = contactDTOBig;
         return ResponseEntity.ok(responseAPI);
     }
 
