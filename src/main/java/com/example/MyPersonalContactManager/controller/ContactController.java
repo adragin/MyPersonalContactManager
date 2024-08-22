@@ -42,5 +42,4 @@ public class ContactController {
         responseAPI.response = dbService.getAllContacts().toArray();
         return ResponseEntity.ok(responseAPI);
     }
-
 }
