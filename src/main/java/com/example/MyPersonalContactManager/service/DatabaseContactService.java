@@ -40,6 +40,7 @@ public class DatabaseContactService implements  ContactServiceInterface<Contact,
 
     @Override
     public boolean deleteContactById(String id) {
-        return false;
+        dbRepository.deleteContactById(id);
+        return true;
     }
 }

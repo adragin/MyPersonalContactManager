@@ -55,6 +55,13 @@ public class Contact {
         this.updateDate = LocalDateTime.now();
     }
 
+    public LocalDate getBirthday() {
+        Utils utils = new Utils();
+         if (utils.isBirthdayDefault(birthday)) {
+             return null;
+         }
+        return this.birthday;
+    }
 
     public void setBirthday(LocalDate birthday) {
         Utils utils = new Utils();
