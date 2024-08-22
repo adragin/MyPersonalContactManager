@@ -1,4 +1,4 @@
-package com.example.MyPersonalContactManager.model;
+package com.example.MyPersonalContactManager.models.ContactModels;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

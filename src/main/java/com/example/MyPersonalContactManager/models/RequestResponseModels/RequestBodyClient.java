@@ -1,5 +1,8 @@
-package com.example.MyPersonalContactManager.model;
+package com.example.MyPersonalContactManager.models.RequestResponseModels;
 
+import com.example.MyPersonalContactManager.models.ContactModels.Contact;
+import com.example.MyPersonalContactManager.models.ContactModels.ContactDTOBig;
+import com.example.MyPersonalContactManager.models.ContactModels.ContactDTOShort;
 import jakarta.validation.Valid;
 
 import java.util.List;

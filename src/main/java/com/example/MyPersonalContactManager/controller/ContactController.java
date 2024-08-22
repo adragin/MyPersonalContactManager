@@ -1,9 +1,9 @@
 package com.example.MyPersonalContactManager.controller;
 
-import com.example.MyPersonalContactManager.model.Contact;
-import com.example.MyPersonalContactManager.model.ContactDTOBig;
-import com.example.MyPersonalContactManager.model.RequestBodyClient;
-import com.example.MyPersonalContactManager.model.ResponseAPI;
+import com.example.MyPersonalContactManager.models.ContactModels.Contact;
+import com.example.MyPersonalContactManager.models.ContactModels.ContactDTOBig;
+import com.example.MyPersonalContactManager.models.RequestResponseModels.RequestBodyClient;
+import com.example.MyPersonalContactManager.models.RequestResponseModels.ResponseAPI;
 import com.example.MyPersonalContactManager.service.DatabaseContactService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
