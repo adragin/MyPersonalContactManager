@@ -33,10 +33,12 @@ public class Contact {
     private String address;
     private URL photo;
     private LocalDateTime createDate;
+    private LocalDateTime updateDate;
 
     public Contact() {
         this.id = String.valueOf(UUID.randomUUID());
         this.createDate = LocalDateTime.now();
+        this.updateDate = LocalDateTime.now();
     }
 
     public Contact(String firstName, String lastName, String email, String phone, LocalDate birthday,
@@ -50,6 +52,7 @@ public class Contact {
         this.address = address;
         this.photo = photo;
         this.createDate = LocalDateTime.now();
+        this.updateDate = LocalDateTime.now();
     }
 
 
@@ -73,6 +76,7 @@ public class Contact {
                 ", birthday=" + birthday +
                 ", address='" + address + '\'' +
                 ", photo=" + photo +
-                ", createDate=" + createDate;
+                ", createDate=" + createDate +
+                ", updateDate=" + updateDate;
     }
 }

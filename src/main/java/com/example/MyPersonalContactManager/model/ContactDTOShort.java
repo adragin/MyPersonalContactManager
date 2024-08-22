@@ -1,20 +1,20 @@
 package com.example.MyPersonalContactManager.model;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class ContactDTO {
+public class ContactDTOShort {
+    @NotBlank
     private String firstName;
+    @NotBlank
     private String phone;
 
-    public ContactDTO(String firstName, String phone) {
+    public ContactDTOShort(String firstName, String phone) {
         this.firstName = firstName;
         this.phone = phone;
     }
 
-//    public ContactDTO() {
-//
-//    }
 }

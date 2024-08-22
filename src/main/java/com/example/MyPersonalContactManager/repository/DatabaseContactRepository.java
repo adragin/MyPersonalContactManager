@@ -1,7 +1,8 @@
 package com.example.MyPersonalContactManager.repository;
 
 import com.example.MyPersonalContactManager.model.Contact;
-import com.example.MyPersonalContactManager.model.ContactDTO;
+import com.example.MyPersonalContactManager.model.ContactDTOBig;
+import com.example.MyPersonalContactManager.model.ContactDTOShort;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -14,7 +15,7 @@ import java.sql.Statement;
 import java.util.List;
 
 @Repository
-public class DatabaseContactRepository implements ContactRepositoryInterface <Contact, ContactDTO>{
+public class DatabaseContactRepository implements ContactRepositoryInterface <Contact, ContactDTOBig>{
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -76,7 +77,7 @@ public class DatabaseContactRepository implements ContactRepositoryInterface <Co
     }
 
     @Override
-    public ContactDTO updateContact(String id, ContactDTO newContact) {
+    public ContactDTOBig updateContact(String id, ContactDTOBig newContact) {
         return null;
     }
 
