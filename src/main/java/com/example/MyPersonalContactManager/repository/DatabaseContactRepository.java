@@ -82,6 +82,6 @@ public class DatabaseContactRepository implements ContactRepositoryInterface <Co
 
     @Override
     public boolean deleteContactById(String id) {
-        return false;
+        return jdbcTemplate.update("DELETE FROM Contacts WHERE id = ?", id) > 0;
     }
 }
