@@ -42,4 +42,10 @@ public class ContactController {
         responseAPI.response = dbService.getAllContacts().toArray();
         return ResponseEntity.ok(responseAPI);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Boolean> deleteContactById(@PathVariable String id) {
+        boolean isDeleted = dbService.deleteContactById(id);
+        return ResponseEntity.ok(isDeleted);
+    }
 }
