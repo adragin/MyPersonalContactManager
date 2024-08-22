@@ -1,19 +1,16 @@
 package com.example.MyPersonalContactManager.service;
 
 import com.example.MyPersonalContactManager.model.Contact;
-import com.example.MyPersonalContactManager.model.ContactDTO;
+import com.example.MyPersonalContactManager.model.ContactDTOBig;
+import com.example.MyPersonalContactManager.model.ContactDTOShort;
 import com.example.MyPersonalContactManager.repository.DatabaseContactRepository;
-import lombok.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 
 @Component
-public class DatabaseContactService implements  ContactServiceInterface<Contact, ContactDTO>{
+public class DatabaseContactService implements  ContactServiceInterface<Contact, ContactDTOBig>{
     public DatabaseContactService(DatabaseContactRepository dbRepository) {
         this.dbRepository = dbRepository;
     }
@@ -37,13 +34,13 @@ public class DatabaseContactService implements  ContactServiceInterface<Contact,
     }
 
     @Override
-    public ContactDTO updateContact(String id, ContactDTO newContact) {
-        return null;
+    public ContactDTOBig updateContact(String id, ContactDTOBig newContact) {
+        dbRepository.updateContact(id, newContact);
+        return newContact;
     }
 
     @Override
     public boolean deleteContactById(String id) {
-        dbRepository.deleteContactById(id);
-        return true;
+        return false;
     }
 }

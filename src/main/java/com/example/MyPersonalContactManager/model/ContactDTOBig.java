@@ -9,14 +9,12 @@ import lombok.Setter;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import static com.example.MyPersonalContactManager.utils.ConstantsContact.DEFAULT_BIRTHDAY;
 
 @Getter
 @Setter
-public class Contact {
-    private String id;
+public class ContactDTOBig {
     @NotBlank
     private String firstName;
     private String lastName;
@@ -27,19 +25,9 @@ public class Contact {
     private LocalDate birthday ;
     private String address;
     private URL photo;
-    private LocalDateTime createDate;
-    @Setter
     private LocalDateTime lastUpdateDate;
 
-    public Contact() {
-        this.id = String.valueOf(UUID.randomUUID());
-        this.createDate = LocalDateTime.now();
-        this.lastUpdateDate = LocalDateTime.now();
-    }
-
-    public Contact(String firstName, String lastName, String email, String phone, LocalDate birthday,
-                   String address, URL photo) {
-        this.id = String.valueOf(UUID.randomUUID());
+    public ContactDTOBig(String firstName, String lastName, String email, String phone, LocalDate birthday, String address, URL photo) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -47,11 +35,14 @@ public class Contact {
         this.birthday = birthday;
         this.address = address;
         this.photo = photo;
-        this.createDate = LocalDateTime.now();
         this.lastUpdateDate = LocalDateTime.now();
     }
 
-//COPY CODE
+    public ContactDTOBig() {
+        this.lastUpdateDate = LocalDateTime.now();
+    }
+
+    //COPY CODE
     public void setBirthday(LocalDate birthday) {
         Utils utils = new Utils();
 
@@ -63,16 +54,15 @@ public class Contact {
 
     @Override
     public String toString() {
-        return "Contact{" +
-                "id='" + id + '\'' +
-                ", firstName='" + firstName + '\'' +
+        return "ContactDTOBig{" +
+                "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
                 ", birthday=" + birthday +
                 ", address='" + address + '\'' +
                 ", photo=" + photo +
-                ", createDate=" + createDate +
-                ", updateDate=" + lastUpdateDate;
+                ", lastUpdateDate=" + lastUpdateDate +
+                '}';
     }
 }
