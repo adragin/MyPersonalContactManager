@@ -1,7 +1,7 @@
 package com.example.MyPersonalContactManager.repository;
 
-import com.example.MyPersonalContactManager.model.Contact;
-import com.example.MyPersonalContactManager.model.ContactDTOBig;
+import com.example.MyPersonalContactManager.models.ContactModels.Contact;
+import com.example.MyPersonalContactManager.models.ContactModels.ContactDTOBig;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
