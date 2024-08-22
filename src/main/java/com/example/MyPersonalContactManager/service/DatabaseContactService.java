@@ -35,12 +35,12 @@ public class DatabaseContactService implements  ContactServiceInterface<Contact,
 
     @Override
     public ContactDTOBig updateContact(String id, ContactDTOBig newContact) {
-        return null;
+        dbRepository.updateContact(id, newContact);
+        return newContact;
     }
 
     @Override
     public boolean deleteContactById(String id) {
-        dbRepository.deleteContactById(id);
-        return true;
+        return false;
     }
 }

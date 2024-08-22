@@ -1,19 +1,18 @@
 package com.example.MyPersonalContactManager.utils;
 
 import java.time.LocalDate;
-
-import static com.example.MyPersonalContactManager.utils.ConstantsContact.DEFAULT_BIRTHDAY;
+import java.time.LocalDateTime;
 
 public class Utils {
-    public boolean isBirthdayNull (LocalDate birthday) {
-        if (birthday == null) {
+    public boolean isDateNull(LocalDate date) {
+        if (date == null) {
             return true;
         }
         return false;
     }
 
-    public boolean isBirthdayDefault (LocalDate birthday) {
-        if (birthday.equals(DEFAULT_BIRTHDAY)) {
+    public boolean isDateTimeNull(LocalDateTime dateTime) {
+        if (dateTime == null) {
             return true;
         }
         return false;

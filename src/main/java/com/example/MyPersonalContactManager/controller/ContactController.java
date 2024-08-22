@@ -46,7 +46,7 @@ public class ContactController {
 
     @PutMapping(value = "/updateContact")
     public ResponseEntity<ResponseAPI> updateContact(@PathVariable String id, @RequestBody RequestBodyClient requestBodyClient) {
-        responseAPI = new ResponseAPI<>();
+        responseAPI = new ResponseAPI();
         ContactDTOBig contactDTOBig = dbService.updateContact(id, requestBodyClient.contactDTOBig);
         responseAPI.response = contactDTOBig;
         return ResponseEntity.ok(responseAPI);

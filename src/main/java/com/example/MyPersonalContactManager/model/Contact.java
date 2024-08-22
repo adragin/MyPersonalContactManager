@@ -2,18 +2,13 @@ package com.example.MyPersonalContactManager.model;
 
 import com.example.MyPersonalContactManager.utils.Utils;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.net.URL;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.Locale;
 import java.util.UUID;
 
 import static com.example.MyPersonalContactManager.utils.ConstantsContact.DEFAULT_BIRTHDAY;
@@ -33,12 +28,13 @@ public class Contact {
     private String address;
     private URL photo;
     private LocalDateTime createDate;
-    private LocalDateTime updateDate;
+    @Setter
+    private LocalDateTime lastUpdateDate;
 
     public Contact() {
         this.id = String.valueOf(UUID.randomUUID());
         this.createDate = LocalDateTime.now();
-        this.updateDate = LocalDateTime.now();
+        this.lastUpdateDate = LocalDateTime.now();
     }
 
     public Contact(String firstName, String lastName, String email, String phone, LocalDate birthday,
@@ -52,21 +48,14 @@ public class Contact {
         this.address = address;
         this.photo = photo;
         this.createDate = LocalDateTime.now();
-        this.updateDate = LocalDateTime.now();
+        this.lastUpdateDate = LocalDateTime.now();
     }
 
-    public LocalDate getBirthday() {
-        Utils utils = new Utils();
-         if (utils.isBirthdayDefault(birthday)) {
-             return null;
-         }
-        return this.birthday;
-    }
-
+//COPY CODE
     public void setBirthday(LocalDate birthday) {
         Utils utils = new Utils();
 
-        if (utils.isBirthdayNull(birthday)) {
+        if (utils.isDateNull(birthday)) {
             this.birthday = DEFAULT_BIRTHDAY;
         }
         else this.birthday = birthday;
@@ -84,6 +73,6 @@ public class Contact {
                 ", address='" + address + '\'' +
                 ", photo=" + photo +
                 ", createDate=" + createDate +
-                ", updateDate=" + updateDate;
+                ", updateDate=" + lastUpdateDate;
     }
 }

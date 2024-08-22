@@ -1,5 +1,6 @@
 package com.example.MyPersonalContactManager.model;
 
+import com.example.MyPersonalContactManager.utils.Utils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -8,6 +9,8 @@ import lombok.Setter;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+import static com.example.MyPersonalContactManager.utils.ConstantsContact.DEFAULT_BIRTHDAY;
 
 @Getter
 @Setter
@@ -22,6 +25,7 @@ public class ContactDTOBig {
     private LocalDate birthday ;
     private String address;
     private URL photo;
+    private LocalDateTime lastUpdateDate;
 
     public ContactDTOBig(String firstName, String lastName, String email, String phone, LocalDate birthday, String address, URL photo) {
         this.firstName = firstName;
@@ -31,8 +35,34 @@ public class ContactDTOBig {
         this.birthday = birthday;
         this.address = address;
         this.photo = photo;
+        this.lastUpdateDate = LocalDateTime.now();
     }
 
     public ContactDTOBig() {
+        this.lastUpdateDate = LocalDateTime.now();
+    }
+
+    //COPY CODE
+    public void setBirthday(LocalDate birthday) {
+        Utils utils = new Utils();
+
+        if (utils.isDateNull(birthday)) {
+            this.birthday = DEFAULT_BIRTHDAY;
+        }
+        else this.birthday = birthday;
+    }
+
+    @Override
+    public String toString() {
+        return "ContactDTOBig{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", birthday=" + birthday +
+                ", address='" + address + '\'' +
+                ", photo=" + photo +
+                ", lastUpdateDate=" + lastUpdateDate +
+                '}';
     }
 }
