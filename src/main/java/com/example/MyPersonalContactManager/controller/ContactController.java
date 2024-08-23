@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping ("/MyPersonalContactManager")
+@RequestMapping("/MyPersonalContactManager")
 public class ContactController {
 
     private ResponseAPI responseAPI;
@@ -22,7 +22,7 @@ public class ContactController {
 
     @PostMapping(value = "/createContact", consumes = "application/json")
     public ResponseEntity<ResponseAPI> crateContact(@Valid @RequestBody RequestBodyClient requestBodyClient) {
-        responseAPI  = new ResponseAPI();
+        responseAPI = new ResponseAPI();
 
         Contact contact = dbService.createContact(requestBodyClient.contact);
         responseAPI.response = contact;
@@ -31,7 +31,7 @@ public class ContactController {
 
     @GetMapping("/contacts/{id}")
     public ResponseEntity<ResponseAPI> getContactById(@PathVariable String id) {
-        responseAPI  = new ResponseAPI();
+        responseAPI = new ResponseAPI();
         Contact contact = dbService.getContactById(id);
         responseAPI.response = contact;
         return ResponseEntity.ok(responseAPI);
@@ -39,7 +39,7 @@ public class ContactController {
 
     @GetMapping(value = "/contacts")
     public ResponseEntity<ResponseAPI> getAllContacts() {
-        responseAPI  = new ResponseAPI();
+        responseAPI = new ResponseAPI();
         responseAPI.response = dbService.getAllContacts().toArray();
         return ResponseEntity.ok(responseAPI);
     }
@@ -52,7 +52,7 @@ public class ContactController {
         return ResponseEntity.ok(responseAPI);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("contacts/{id}")
     public ResponseEntity<Boolean> deleteContactById(@PathVariable String id) {
         boolean isDeleted = dbService.deleteContactById(id);
         return ResponseEntity.ok(isDeleted);
