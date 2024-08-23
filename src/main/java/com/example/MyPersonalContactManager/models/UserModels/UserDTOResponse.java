@@ -1,5 +1,6 @@
 package com.example.MyPersonalContactManager.models.UserModels;
 
+import com.example.MyPersonalContactManager.utils.UtilsAuthorization;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -15,12 +16,15 @@ public class UserDTOResponse {
     private String login;
     private String token;
 
-    public UserDTOResponse(String login, String token) {
+    public UserDTOResponse(String login, String password) {
         this.login = login;
-        this.token = generateToken();
+        this.token = generateToken(login, password);
     }
-    private String  generateToken(){
-        return UUID.randomUUID().toString().replace("-","");
+
+
+    private String generateToken(String login, String password) {
+        UtilsAuthorization utilsAuthorization = new UtilsAuthorization();
+        return utilsAuthorization.generateToken(login, password);
     }
 
     @Override
@@ -31,4 +35,3 @@ public class UserDTOResponse {
                 '}';
     }
 }
-//
