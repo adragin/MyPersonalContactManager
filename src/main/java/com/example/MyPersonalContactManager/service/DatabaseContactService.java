@@ -9,13 +9,14 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class DatabaseContactService implements  ContactServiceInterface<Contact, ContactDTOBig>{
+public class DatabaseContactService implements ContactServiceInterface<Contact, ContactDTOBig> {
     public DatabaseContactService(DatabaseContactRepository dbRepository) {
         this.dbRepository = dbRepository;
     }
 
     @Autowired
     private DatabaseContactRepository dbRepository;
+
     @Override
     public Contact getContactById(String id) {
         return dbRepository.getContactById(id);
@@ -40,6 +41,7 @@ public class DatabaseContactService implements  ContactServiceInterface<Contact,
 
     @Override
     public boolean deleteContactById(String id) {
-        return false;
+        dbRepository.deleteContactById(id);
+        return true;
     }
 }

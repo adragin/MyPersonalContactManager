@@ -14,7 +14,7 @@ import java.sql.Statement;
 import java.util.List;
 
 @Repository
-public class DatabaseContactRepository implements ContactRepositoryInterface <Contact, ContactDTOBig>{
+public class DatabaseContactRepository implements ContactRepositoryInterface<Contact, ContactDTOBig> {
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -98,7 +98,7 @@ public class DatabaseContactRepository implements ContactRepositoryInterface <Co
 
 //        KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(sql,Statement.NO_GENERATED_KEYS);
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.NO_GENERATED_KEYS);
             ps.setString(1, newContact.getFirstName());
             ps.setString(2, newContact.getLastName());
             ps.setString(3, newContact.getEmail());
@@ -108,7 +108,8 @@ public class DatabaseContactRepository implements ContactRepositoryInterface <Co
             ps.setString(7, String.valueOf(newContact.getPhoto()));
             ps.setString(8, String.valueOf(newContact.getLastUpdateDate()));
             ps.setString(9, id);
-            return ps;});
+            return ps;
+        });
 
         String selectSql = "SELECT * FROM Contacts WHERE id = ?";
         return jdbcTemplate.queryForObject(selectSql, contactDTOBigRowMapper, id);
@@ -116,6 +117,6 @@ public class DatabaseContactRepository implements ContactRepositoryInterface <Co
 
     @Override
     public boolean deleteContactById(String id) {
-        return false;
+        return jdbcTemplate.update("DELETE FROM Contacts WHERE id = ?", id) > 0;
     }
 }
