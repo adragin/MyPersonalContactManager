@@ -27,7 +27,25 @@
 -- UPDATE Contacts
 -- SET Last_Update_Date = Create_Date;
 
+-- Создание таблиц User and User_Token в вашей БД
+--CREATE TABLE User (
+--    ID_USER varchar(36) primary key,
+--    USER_ROLE boolean check (USER_ROLE in (0,1)) not null,
+--    LOGIN varchar(128) not null unique,
+--    USER_PASSWORD  varchar(50) not null,
+--    USER_Name varchar(36) not null,
+--    Create_Date TIMESTAMP,
+--    Last_Update_Date TIMESTAMP
+--);
+--
+--select * from User;
 
+--CREATE TABLE User_Token (
+--    TOKEN varchar(256),
+--    USER_ID varchar(36),
+--    CREATE_DATE TIMESTAMP,
+--    LAST_UPDATE_DATE TIMESTAMP
+--);
 
 
 
