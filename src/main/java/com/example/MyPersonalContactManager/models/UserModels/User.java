@@ -1,10 +1,16 @@
 package com.example.MyPersonalContactManager.models.UserModels;
 
+import com.example.MyPersonalContactManager.utils.Utils;
+import com.example.MyPersonalContactManager.utils.UtilsAuthorization;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.UUID;
+
+import static com.example.MyPersonalContactManager.utils.ConstantsContact.DEFAULT_BIRTHDAY;
+
 @Getter
 @Setter
 public class User {
@@ -33,9 +39,10 @@ public class User {
     }
 
     // Пока так
-    private String generateToken(){
+    public String generateToken(){
 
-        return UUID.randomUUID().toString().replace("-","");
+        UtilsAuthorization utilsAuthorization = new UtilsAuthorization();
+        return utilsAuthorization.generateToken(this.login, this.password);  // Генерация токена с использованием логина и пароля
     }
 
     @Override
