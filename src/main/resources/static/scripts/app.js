@@ -2,7 +2,7 @@
 const apiUrl = 'http://localhost:8080/MyPersonalContactManager/contacts';
 const deleteContactUrl = 'http://localhost:8080/MyPersonalContactManager/contacts';
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     fetch(apiUrl)
         .then(response => response.json())
         .then(data => {
@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 const shortView = document.createElement('div');
                 shortView.className = 'contact-short';
                 shortView.innerHTML = `
-                    <p class="full_name">${contact.firstName} ${contact.lastName}</p>
+                    <p class="full-name">${contact.firstName} ${contact.lastName}</p>
                     <p>Phone: ${contact.phone}</p>
                     <p>Email: ${contact.email}</p>
                 `;
