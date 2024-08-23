@@ -31,7 +31,7 @@ public class DatabaseContactRepository implements ContactRepositoryInterface <Co
         contact.setPhone(rs.getString("Phone"));
         contact.setBirthday(rs.getDate("Birth_Day").toLocalDate());
         contact.setAddress(rs.getString("Address"));
-        contact.setPhone(rs.getString("Photo"));
+        contact.setPhoto(rs.getURL("Photo"));
         contact.setCreateDate(rs.getTimestamp("Create_Date").toLocalDateTime());
         contact.setLastUpdateDate(rs.getTimestamp("Last_Update_Date").toLocalDateTime());
         return contact;
@@ -44,7 +44,7 @@ public class DatabaseContactRepository implements ContactRepositoryInterface <Co
         contactDTO.setPhone(rs.getString("Phone"));
         contactDTO.setBirthday(rs.getDate("Birth_Day").toLocalDate());
         contactDTO.setAddress(rs.getString("Address"));
-        contactDTO.setPhone(rs.getString("Photo"));
+        contactDTO.setPhoto(rs.getURL("Photo"));
         contactDTO.setLastUpdateDate(rs.getTimestamp("Last_Update_Date").toLocalDateTime());
         return contactDTO;
     };
