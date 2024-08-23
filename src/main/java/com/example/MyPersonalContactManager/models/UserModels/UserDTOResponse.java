@@ -16,15 +16,9 @@ public class UserDTOResponse {
     private String login;
     private String token;
 
-    public UserDTOResponse(String login, String password) {
-        this.login = login;
-        this.token = generateToken(login, password);
-    }
-
-
-    private String generateToken(String login, String password) {
-        UtilsAuthorization utilsAuthorization = new UtilsAuthorization();
-        return utilsAuthorization.generateToken(login, password);
+    public UserDTOResponse() {
+        this.login = getLogin();
+        this.token = getToken();
     }
 
     @Override
