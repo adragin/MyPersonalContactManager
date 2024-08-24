@@ -1,6 +1,5 @@
 package com.example.MyPersonalContactManager.models.UserModels;
 
-import com.example.MyPersonalContactManager.utils.UtilsAuthorization;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,13 +13,14 @@ import java.util.UUID;
 public class User {
     private UUID userId;
     @NotBlank
-    private Boolean role;
-    @NotBlank @UniqueElements
-    private String login;
+    private Boolean role; // true->admin, false->user
+    @NotBlank
+    @UniqueElements
+    private String login; // email
     @NotBlank
     private String password;
     @NotBlank
-    private String user_name;
+    private String userName; // FullName or FirstName
     private LocalDateTime createDate;
     private LocalDateTime lastUpdateDate;
 
@@ -30,12 +30,12 @@ public class User {
         this.lastUpdateDate = LocalDateTime.now();
     }
 
-    public User(Boolean role, String login, String password, String user_name) {
+    public User(Boolean role, String login, String password, String userName) {
         this.userId = UUID.randomUUID();
         this.role = role;
         this.login = login;
         this.password = password;
-        this.user_name = user_name;
+        this.userName = userName;
         this.createDate = LocalDateTime.now();
         this.lastUpdateDate = LocalDateTime.now();
     }
@@ -47,7 +47,7 @@ public class User {
                 ", role=" + role +
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
-                ", user_name='" + user_name + '\'' +
+                ", user_name='" + userName + '\'' +
                 ", createDate=" + createDate +
                 ", lastUpdateDate=" + lastUpdateDate +
                 '}';
