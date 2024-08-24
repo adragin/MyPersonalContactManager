@@ -1,8 +1,10 @@
 package com.example.MyPersonalContactManager.utils;
 
-public class UtilsAuthorization {
-    public String generateToken(String login, String password){
+import org.springframework.stereotype.Component;
 
-        return "001{" +login +"|" + password +"}";
+@Component
+public class UtilsAuthorization {
+    public String generateToken(String login, String password) {
+        return "001{" + login + "|" + password + "}";
     }
 }

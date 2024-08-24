@@ -22,9 +22,6 @@ public class UserDTORegister {
         this.name = name;
     }
 
-//    public UserDTORegister() {
-//    }
-
     @Override
     public String toString() {
         return "UserDTORegister{" +
@@ -33,4 +30,3 @@ public class UserDTORegister {
                 '}';
     }
 }
-//
