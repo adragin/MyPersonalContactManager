@@ -9,8 +9,8 @@ import java.util.UUID;
 
 @Setter
 @Getter
-public class UserToken extends User{
-   private final String token;
+public class UserToken extends User {
+    private final String token;
     private UUID userId;
     private LocalDateTime createDate;
     private LocalDateTime lastUpdateDate;
@@ -19,8 +19,8 @@ public class UserToken extends User{
     public UserToken() {
         this.token = authUser.generateToken(getLogin(), getPassword());
         this.userId = getUserId();
-        this.createDate = LocalDateTime.now();;
-        this.lastUpdateDate = LocalDateTime.now();;
+        this.createDate = LocalDateTime.now();
+        this.lastUpdateDate = LocalDateTime.now();
     }
 }
 
