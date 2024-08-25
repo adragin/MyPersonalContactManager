@@ -1,5 +1,6 @@
 package com.example.MyPersonalContactManager.service;
 
+import com.example.MyPersonalContactManager.exceptions.UserAlreadyExistsException;
 import com.example.MyPersonalContactManager.models.UserModels.*;
 import com.example.MyPersonalContactManager.repository.InterfaceUserRepository;
 import com.example.MyPersonalContactManager.utils.UtilsAuthorization;
@@ -20,7 +21,7 @@ public class DataBaseUserService implements InterfaceUserService {
     public UserDTOResponse registerUser(UserDTORegister userDTORegister) {
         Optional<User> existingUser = userRepository.getUserByLogin(userDTORegister.getLogin());
         if (existingUser.isPresent()) {
-            return null;
+            throw new UserAlreadyExistsException("User already exists");
         }
 
         User newUser = new User();
@@ -32,6 +33,7 @@ public class DataBaseUserService implements InterfaceUserService {
         userRepository.createUser(newUser);
 
         String token = utilsAuthorization.generateToken(newUser.getLogin(), newUser.getPassword());
+        userRepository.saveToken(token, String.valueOf(newUser.getUserId()));
         return new UserDTOResponse(newUser.getLogin(), token);
     }
 

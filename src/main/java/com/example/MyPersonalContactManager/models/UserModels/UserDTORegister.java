@@ -27,6 +27,7 @@ public class UserDTORegister {
         return "UserDTORegister{" +
                 "login='" + login + '\'' +
                 ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
                 '}';
     }
 }

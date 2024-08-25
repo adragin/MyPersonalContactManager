@@ -24,9 +24,9 @@ public class DatabaseUserRepository implements InterfaceUserRepository<User> {
     private final RowMapper<User> userRowMapper = (rs, rowNum) -> {
         User user = new User();
         user.setUserId(UUID.fromString(rs.getString("user_id")));
-        user.setRole(rs.getBoolean("role"));
+        user.setRole(rs.getBoolean("USER_ROLE"));
         user.setLogin(rs.getString("login"));
-        user.setPassword(rs.getString("password"));
+        user.setPassword(rs.getString("USER_PASSWORD"));
         user.setUserName(rs.getString("user_name"));
         user.setCreateDate(rs.getTimestamp("create_date").toLocalDateTime());
         user.setLastUpdateDate(rs.getTimestamp("last_update_date").toLocalDateTime());
@@ -35,7 +35,7 @@ public class DatabaseUserRepository implements InterfaceUserRepository<User> {
 
     @Override
     public User createUser(User user) {
-        String insertSql = "INSERT INTO users (user_id, role, login, password, user_name, create_date, last_update_date) " +
+        String insertSql = "INSERT INTO users (user_id, USER_ROLE, login, USER_PASSWORD, user_name, create_date, last_update_date) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(insertSql,
                 user.getUserId().toString(),
@@ -43,8 +43,8 @@ public class DatabaseUserRepository implements InterfaceUserRepository<User> {
                 user.getLogin(),
                 user.getPassword(),
                 user.getUserName(),
-                user.getCreateDate(),
-                user.getLastUpdateDate());
+                user.getCreateDate().toLocalDate(),
+                user.getLastUpdateDate().toLocalDate());
         return user;
     }
 
@@ -79,7 +79,7 @@ public class DatabaseUserRepository implements InterfaceUserRepository<User> {
 
     @Override
     public User updateUser(User user) {
-        String updateSql = "UPDATE users SET role = ?, login = ?, password = ?, user_name = ?, " +
+        String updateSql = "UPDATE users SET USER_ROLE = ?, login = ?, USER_PASSWORD = ?, user_name = ?, " +
                 "last_update_date = ? WHERE user_id = ?";
         jdbcTemplate.update(updateSql,
                 user.getRole(),
