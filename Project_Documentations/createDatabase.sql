@@ -1,51 +1,64 @@
 -- выполнить, если не создана БД
 -- CREATE DATABASE MyPersonalCpntactManager_DB;
 
--- USE MyPersonalCpntactManager_DB;
+USE MyPersonalCpntactManager_DB;
 
 -- выполнить, если не создана Таблица Contacts
--- CREATE TABLE Contacts (
---     id varchar(36),
---     First_Name VARCHAR(128) NOT NULL,
---     Last_Name VARCHAR(128),
---     Email varchar (50),
---     Phone varchar(15),
---     Birth_Day DATE,
---     Address VARCHAR(128),
---     Photo varchar(100),
---     Create_Date TIMESTAMP,
---     Last_Update_Date TIMESTAMP
--- );
+CREATE TABLE Contacts
+(
+    id               varchar(36),
+    First_Name       VARCHAR(128) NOT NULL,
+    Last_Name        VARCHAR(128),
+    Email            varchar(50),
+    Phone            varchar(15),
+    Birth_Day        DATE,
+    Address          VARCHAR(128),
+    Photo            varchar(100),
+    Create_Date      TIMESTAMP,
+    Last_Update_Date TIMESTAMP
+);
 
--- select * from Contacts;
+select *
+from Contacts;
 
--- если верхниве шаги были выполнены ранее, то для добавления поля  Last_Update_Date выполнить следующие запрос
--- 1) запрос на добавления нового поля Last_Update_Date в таблицу Contacts
--- ALTER TABLE Contacts
--- add column Last_Update_Date TIMESTAMP;
--- 2) обновление всех существующиех данных в БД (добавить в новое поле значение из Create_Date)
--- UPDATE Contacts
--- SET Last_Update_Date = Create_Date;
+-- Создание таблиц Users and Users_Token в вашей БД
+CREATE TABLE Users
+(
+    User_Id          varchar(36) primary key,
+    User_Role        boolean check (User_Role in (0, 1)) not null,
+    Login            varchar(128)                        not null unique,
+    Password         varchar(50)                         not null,
+    User_Name        varchar(36)                         not null,
+    Create_Date      TIMESTAMP,
+    Last_Update_Date TIMESTAMP
+);
 
--- Создание таблиц User and User_Token в вашей БД
---CREATE TABLE User (
---    USER_ID varchar(36) primary key,
---    USER_ROLE boolean check (USER_ROLE in (0,1)) not null,
---    LOGIN varchar(128) not null unique,
---    USER_PASSWORD  varchar(50) not null,
---    USER_Name varchar(36) not null,
---    Create_Date TIMESTAMP,
---    Last_Update_Date TIMESTAMP
---);
---
---select * from User;
+-- Тестовые users
+INSERT INTO users (User_Id, User_Name, Login, Password, User_Role, Create_Date, Last_Update_Date)
+VALUES ('4b3b85f1-1a3e-4c29-9b59-74c891b4b35d', 'Alex Doe', 'alexdoe@example.com', 'password123', TRUE, NOW(), NOW()),
+       ('d2b2b67e-5b2f-40a8-8b5e-c92a5b70e4d1', 'Nata Smith', 'natasmith@example.com', 'mypassword', TRUE, NOW(),
+        NOW()),
+       ('f6c738a7-8d7d-4f1e-bb9c-d76d30b78c9d', 'Alice Johnson', 'alicejohnson@example.com', 'alicepass', FALSE, NOW(),
+        NOW()),
+       ('c9e5d4f1-3e2a-472a-a09b-8c1b9bde1b98', 'Henry Moore', 'henrymoore@example.com', 'henrypass', FALSE, NOW(),
+        NOW());
 
---CREATE TABLE User_Token (
---    TOKEN varchar(256),
---    USER_ID varchar(36),
---    CREATE_DATE TIMESTAMP,
---    LAST_UPDATE_DATE TIMESTAMP
---);
+
+select *
+from Users;
+
+CREATE TABLE Users_Token
+(
+    Token            varchar(256),
+    User_Id          varchar(36),
+    Create_Date      TIMESTAMP,
+    Last_Update_Date TIMESTAMP
+);
+
+-- Тестовая запись Users_Token
+INSERT INTO Users_Token (Token, User_Id, Create_Date, Last_Update_Date)
+VALUES ('001{alexdoe@example.com|password123}', '4b3b85f1-1a3e-4c29-9b59-74c891b4b35d', now(), now());
+
 
 
 

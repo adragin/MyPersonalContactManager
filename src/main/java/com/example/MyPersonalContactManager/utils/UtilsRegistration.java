@@ -3,7 +3,7 @@ package com.example.MyPersonalContactManager.utils;
 import com.example.MyPersonalContactManager.models.UserModels.User;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
+import java.util.Objects;
 
 @Component
 public class UtilsRegistration {
@@ -11,8 +11,8 @@ public class UtilsRegistration {
         return "001{" + login + "|" + password + "}";
     }
 
-    public boolean checkExistingUser(Optional<User> user) {
-        if (user.isPresent()) {
+    public boolean checkExistingUser(User user) {
+        if (Objects.nonNull(user)) {
             return true;
         }
         return false;

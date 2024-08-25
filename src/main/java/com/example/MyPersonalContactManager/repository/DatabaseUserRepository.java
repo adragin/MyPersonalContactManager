@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -23,26 +22,26 @@ public class DatabaseUserRepository implements InterfaceUserRepository<User> {
 
     private final RowMapper<User> userRowMapper = (rs, rowNum) -> {
         User user = new User();
-        user.setUserId(UUID.fromString(rs.getString("user_id")));
-        user.setRole(rs.getBoolean("USER_ROLE"));
-        user.setLogin(rs.getString("login"));
-        user.setPassword(rs.getString("USER_PASSWORD"));
-        user.setUserName(rs.getString("user_name"));
-        user.setCreateDate(rs.getTimestamp("create_date").toLocalDateTime());
-        user.setLastUpdateDate(rs.getTimestamp("last_update_date").toLocalDateTime());
+        user.setUserId(UUID.fromString(rs.getString("User_Id")));
+        user.setUserName(rs.getString("User_Name"));
+        user.setLogin(rs.getString("Login"));
+        user.setPassword(rs.getString("Password"));
+        user.setRole(rs.getBoolean("User_Role"));
+        user.setCreateDate(rs.getTimestamp("Create_Date").toLocalDateTime());
+        user.setLastUpdateDate(rs.getTimestamp("Last_Update_Date").toLocalDateTime());
         return user;
     };
 
     @Override
     public User createUser(User user) {
-        String insertSql = "INSERT INTO users (user_id, USER_ROLE, login, USER_PASSWORD, user_name, create_date, last_update_date) " +
+        String insertSql = "INSERT INTO Users (User_Id, User_Name, Login, Password, User_Role, Create_Date, Last_Update_Date) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(insertSql,
                 user.getUserId().toString(),
-                user.getRole(),
+                user.getUserName(),
                 user.getLogin(),
                 user.getPassword(),
-                user.getUserName(),
+                user.getRole(),
                 user.getCreateDate().toLocalDate(),
                 user.getLastUpdateDate().toLocalDate());
         return user;
@@ -50,24 +49,23 @@ public class DatabaseUserRepository implements InterfaceUserRepository<User> {
 
     @Override
     public User getUserById(String userId) {
-        String selectSql = "SELECT * FROM users WHERE user_id = ?";
+        String selectSql = "SELECT * FROM Users WHERE user_id = ?";
         return jdbcTemplate.queryForObject(selectSql, userRowMapper, userId);
     }
 
     @Override
-    public Optional<User> getUserByLogin(String login) {
-        String selectSql = "SELECT * FROM users WHERE login = ?";
+    public User getUserByLogin(String login) {
+        String selectSql = "SELECT * FROM Users WHERE login = ?";
         try {
-            User user = jdbcTemplate.queryForObject(selectSql, userRowMapper, login);
-            return Optional.ofNullable(user);
+            return jdbcTemplate.queryForObject(selectSql, userRowMapper, login);
         } catch (Exception e) {
-            return Optional.empty();
+            return null;
         }
     }
 
     @Override
     public List<User> getAllUsers() {
-        String selectSql = "SELECT * FROM users";
+        String selectSql = "SELECT * FROM Users";
         return jdbcTemplate.query(selectSql, userRowMapper);
     }
 
@@ -79,8 +77,8 @@ public class DatabaseUserRepository implements InterfaceUserRepository<User> {
 
     @Override
     public User updateUser(User user) {
-        String updateSql = "UPDATE users SET USER_ROLE = ?, login = ?, USER_PASSWORD = ?, user_name = ?, " +
-                "last_update_date = ? WHERE user_id = ?";
+        String updateSql = "UPDATE users SET User_Role = ?, Login = ?, Password = ?, User_Name = ?, " +
+                "Last_Update_Date = ? WHERE User_Id = ?";
         jdbcTemplate.update(updateSql,
                 user.getRole(),
                 user.getLogin(),
@@ -93,7 +91,7 @@ public class DatabaseUserRepository implements InterfaceUserRepository<User> {
 
     @Override
     public void saveToken(String token, String userId) {
-        String insertTokenSql = "INSERT INTO User_Token (TOKEN, USER_ID, CREATE_DATE, LAST_UPDATE_DATE) VALUES (?, ?, ?, ?)";
+        String insertTokenSql = "INSERT INTO Users_Token (Token, User_Id, Create_Date, Last_Update_Date) VALUES (?, ?, ?, ?)";
         jdbcTemplate.update(insertTokenSql, token, userId, LocalDateTime.now(), LocalDateTime.now());
     }
 }

@@ -1,6 +1,8 @@
 package com.example.MyPersonalContactManager.controller;
 
+import com.example.MyPersonalContactManager.exceptions.InvalidLoginPasswordException;
 import com.example.MyPersonalContactManager.exceptions.UserAlreadyExistsException;
+import com.example.MyPersonalContactManager.models.Error;
 import com.example.MyPersonalContactManager.models.UserModels.UserDTOLogin;
 import com.example.MyPersonalContactManager.models.UserModels.UserDTORegister;
 import com.example.MyPersonalContactManager.models.UserModels.UserDTOResponse;
@@ -24,16 +26,24 @@ public class UserController {
         return ResponseEntity.ok(userResponse);
     }
 
-    @GetMapping("/authUser")
-    public ResponseEntity<UserDTOResponse> userAuthorization(UserDTOLogin userDto) {
-        return null;
+    @PostMapping("/userLogin")
+    public ResponseEntity<UserDTOResponse> userAuthorization(@Valid @RequestBody UserDTOLogin userDto) {
+        UserDTOResponse userResponse = dbUserService.loginUser(userDto);
+        return ResponseEntity.ok(userResponse);
     }
 
     //обработка исключения - проверка на существующего юзера
     @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<UserDTOResponse> handleException(UserAlreadyExistsException exception) {
-        UserDTOResponse body = new UserDTOResponse(exception.getMessage());
-        return ResponseEntity.ok(body);
+    public ResponseEntity<UserDTOResponse> handleUserExistException(UserAlreadyExistsException exception) {
+        UserDTOResponse response = new UserDTOResponse(new Error(500, "User already exists"));
+        return ResponseEntity.ok(response);
+    }
+
+    //обработка исключения - проверка пары логин-пароль
+    @ExceptionHandler(InvalidLoginPasswordException.class)
+    public ResponseEntity<UserDTOResponse> handlerCheckLoginPassException(InvalidLoginPasswordException exception) {
+        UserDTOResponse response = new UserDTOResponse(new Error(500, "Invalid login or password"));
+        return ResponseEntity.ok(response);
     }
 
 }
