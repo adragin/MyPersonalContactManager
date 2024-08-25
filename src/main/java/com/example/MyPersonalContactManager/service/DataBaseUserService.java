@@ -39,7 +39,10 @@ public class DataBaseUserService implements InterfaceUserService {
 
         String token = utilsRegistration.generateToken(newUser.getLogin(), newUser.getPassword());
         userRepository.saveToken(token, String.valueOf(newUser.getUserId()));
-        return new UserDTOResponse(newUser.getLogin(), token);
+        return UserDTOResponse.builder()
+                .login(newUser.getLogin())
+                .token(token)
+                .build();
     }
 
     @Override
@@ -51,7 +54,9 @@ public class DataBaseUserService implements InterfaceUserService {
 
         String token = utilsRegistration.generateToken(userDTOLogin.getLogin(), userDTOLogin.getPassword());
         userRepository.saveToken(token, String.valueOf(existingUser.getUserId()));
-        return new UserDTOResponse(token);
+        return UserDTOResponse.builder()
+                .token(token)
+                .build();
     }
 
     @Override

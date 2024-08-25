@@ -35,14 +35,18 @@ public class UserController {
     //обработка исключения - проверка на существующего юзера
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<UserDTOResponse> handleUserExistException(UserAlreadyExistsException exception) {
-        UserDTOResponse response = new UserDTOResponse(new Error(500, "User already exists"));
+        UserDTOResponse response = UserDTOResponse.builder()
+                .error(new Error(500, "User already exists"))
+                .build();
         return ResponseEntity.ok(response);
     }
 
     //обработка исключения - проверка пары логин-пароль
     @ExceptionHandler(InvalidLoginPasswordException.class)
     public ResponseEntity<UserDTOResponse> handlerCheckLoginPassException(InvalidLoginPasswordException exception) {
-        UserDTOResponse response = new UserDTOResponse(new Error(500, "Invalid login or password"));
+        UserDTOResponse response = UserDTOResponse.builder()
+                .error(new Error(500, "Invalid login or password"))
+                .build();
         return ResponseEntity.ok(response);
     }
 

@@ -11,6 +11,7 @@ public class UserDTORegister {
     @NotBlank
     @Email
     private String login;
+    
     @NotBlank
     private String password;
     @NotBlank
