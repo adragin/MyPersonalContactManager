@@ -1,15 +1,17 @@
 package com.example.MyPersonalContactManager.service;
 
-import com.example.MyPersonalContactManager.models.UserModels.*;
+import com.example.MyPersonalContactManager.models.UserModels.User;
+import com.example.MyPersonalContactManager.models.UserModels.UserDTOLogin;
+import com.example.MyPersonalContactManager.models.UserModels.UserDTORegister;
+import com.example.MyPersonalContactManager.models.UserModels.UserDTOResponse;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface InterfaceUserService {
 
     UserDTOResponse registerUser(UserDTORegister userDTO);
 
-    Optional<UserToken> loginUser(UserDTOLogin userDTO);
+    UserDTOResponse loginUser(UserDTOLogin userDTO);
 
     User getUserById(String userId);
 

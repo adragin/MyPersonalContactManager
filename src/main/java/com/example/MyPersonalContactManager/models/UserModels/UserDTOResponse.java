@@ -1,5 +1,6 @@
 package com.example.MyPersonalContactManager.models.UserModels;
 
+import com.example.MyPersonalContactManager.models.Error;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -7,7 +8,7 @@ import lombok.Data;
 @Data
 //@AllArgsConstructor
 public class UserDTOResponse {
-    private String errorMessage;
+    private Error error;
     @NotBlank
     @Email
     private String login;
@@ -18,8 +19,12 @@ public class UserDTOResponse {
         this.token = token;
     }
 
-    public UserDTOResponse(String errorMessage) {
-        this.errorMessage = errorMessage;
+    public UserDTOResponse(Error error) {
+        this.error = error;
+    }
+
+    public UserDTOResponse(String token) {
+        this.token = token;
     }
 
     //
