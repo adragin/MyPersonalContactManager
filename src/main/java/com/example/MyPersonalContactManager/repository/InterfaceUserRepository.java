@@ -16,6 +16,8 @@ public interface InterfaceUserRepository<T> {
 
     T updateUser(T user);
 
+    String getToken(String userId);
+
     void saveToken(String token, String userId);
 }
 

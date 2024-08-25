@@ -2,6 +2,7 @@ package com.example.MyPersonalContactManager.repository;
 
 import com.example.MyPersonalContactManager.models.UserModels.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -90,9 +91,24 @@ public class DatabaseUserRepository implements InterfaceUserRepository<User> {
     }
 
     @Override
+    public String getToken(String userId) {
+        String selectSql = "SELECT Token FROM Users_Token WHERE User_Id = ?";
+        try {
+            return jdbcTemplate.queryForObject(selectSql, new Object[]{userId}, String.class);
+        } catch (EmptyResultDataAccessException e) {
+            return "";
+        }
+    }
+
+    @Override
     public void saveToken(String token, String userId) {
-        String insertTokenSql = "INSERT INTO Users_Token (Token, User_Id, Create_Date, Last_Update_Date) VALUES (?, ?, ?, ?)";
-        jdbcTemplate.update(insertTokenSql, token, userId, LocalDateTime.now(), LocalDateTime.now());
+        if (getToken(userId).isEmpty()) {
+            String insertTokenSql = "INSERT INTO Users_Token (Token, User_Id, Create_Date, Last_Update_Date) VALUES (?, ?, ?, ?)";
+            jdbcTemplate.update(insertTokenSql, token, userId, LocalDateTime.now(), LocalDateTime.now());
+        } else {
+            String updateTokenSql = "UPDATE Users_Token SET Token = ?, Last_Update_Date = ? WHERE User_Id = ?";
+            jdbcTemplate.update(updateTokenSql, token, LocalDateTime.now(), userId);
+        }
     }
 }
 
