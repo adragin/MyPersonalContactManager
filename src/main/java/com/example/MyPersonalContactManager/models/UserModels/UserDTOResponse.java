@@ -2,22 +2,27 @@ package com.example.MyPersonalContactManager.models.UserModels;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
+//@AllArgsConstructor
 public class UserDTOResponse {
+    private String errorMessage;
     @NotBlank
     @Email
     private String login;
     private String token;
 
-//    public UserDTOResponse() {
-//        this.login = getLogin();
-//        this.token = getToken();
-//    }
-//
+    public UserDTOResponse(String login, String token) {
+        this.login = login;
+        this.token = token;
+    }
+
+    public UserDTOResponse(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+
+    //
 //    @Override
 //    public String toString() {
 //        return "UserDTOResponse{" +
