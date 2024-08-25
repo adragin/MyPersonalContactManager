@@ -13,7 +13,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -25,7 +24,7 @@ public class DataBaseUserService implements InterfaceUserService {
 
     @Override
     public UserDTOResponse registerUser(UserDTORegister userDTORegister) {
-        Optional<User> existingUser = userRepository.getUserByLogin(userDTORegister.getLogin());
+        User existingUser = userRepository.getUserByLogin(userDTORegister.getLogin());
         if (utilsRegistration.checkExistingUser(existingUser)) {
             throw new UserAlreadyExistsException("User already exists");
         }
@@ -45,14 +44,14 @@ public class DataBaseUserService implements InterfaceUserService {
 
     @Override
     public UserDTOResponse loginUser(UserDTOLogin userDTOLogin) {
-        Optional<User> existingUser = userRepository.getUserByLogin(userDTOLogin.getLogin());
+        User existingUser = userRepository.getUserByLogin(userDTOLogin.getLogin());
         if (!utilsUserAuth.checkExistingUser(existingUser, userDTOLogin)) {
             throw new InvalidLoginPasswordException("Invalid login or password.");
         }
         User newUser = new User();
         newUser.setLogin(userDTOLogin.getLogin());
 
-        String token = utilsRegistration.generateToken(newUser.getLogin(), newUser.getPassword());
+        String token = utilsRegistration.generateToken(userDTOLogin.getLogin(), userDTOLogin.getPassword());
         userRepository.saveToken(token, String.valueOf(newUser.getUserId()));
         return new UserDTOResponse(token);
     }

@@ -40,6 +40,7 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    //обработка исключения - проверка пары логин-пароль
     @ExceptionHandler(InvalidLoginPasswordException.class)
     public ResponseEntity<UserDTOResponse> handlerCheckLoginPassException(InvalidLoginPasswordException exception) {
         UserDTOResponse response = new UserDTOResponse(new Error(500, "Invalid login or password"));

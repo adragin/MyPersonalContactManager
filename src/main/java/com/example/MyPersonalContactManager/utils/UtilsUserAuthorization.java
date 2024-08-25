@@ -4,14 +4,18 @@ import com.example.MyPersonalContactManager.models.UserModels.User;
 import com.example.MyPersonalContactManager.models.UserModels.UserDTOLogin;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
+import java.util.Objects;
 
 @Component
 public class UtilsUserAuthorization {
-    public boolean checkExistingUser(Optional<User> existingUser, UserDTOLogin userLogin) {
+    public boolean checkExistingUser(User existingUser, UserDTOLogin userLogin) {
+        if (!Objects.nonNull(existingUser)) {
+            return false;
+        }
 
-        if (existingUser.get().getPassword().equals(userLogin.getPassword()) &&
-                (existingUser.get().getLogin().equals(userLogin.getLogin()))) {
+        if (existingUser.getPassword().equals(userLogin.getPassword()) &&
+                (existingUser.getLogin().equals(userLogin.getLogin()))) {
+
             return true;
         }
         return false;
