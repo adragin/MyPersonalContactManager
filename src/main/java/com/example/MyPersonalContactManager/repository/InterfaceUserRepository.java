@@ -1,7 +1,6 @@
 package com.example.MyPersonalContactManager.repository;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface InterfaceUserRepository<T> {
 
@@ -9,7 +8,7 @@ public interface InterfaceUserRepository<T> {
 
     T getUserById(String userId);
 
-    Optional<T> getUserByLogin(String login);
+    T getUserByLogin(String login);
 
     List<T> getAllUsers();
 
