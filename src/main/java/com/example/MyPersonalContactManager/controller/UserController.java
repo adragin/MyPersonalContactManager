@@ -36,7 +36,6 @@ public class UserController {
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<UserDTOResponse> handleUserExistException(UserAlreadyExistsException exception) {
         UserDTOResponse response = new UserDTOResponse(new Error(500, "User already exists"));
-//        response.setError(new Error(500, "User already exists"));
         return ResponseEntity.ok(response);
     }
 
@@ -44,7 +43,6 @@ public class UserController {
     @ExceptionHandler(InvalidLoginPasswordException.class)
     public ResponseEntity<UserDTOResponse> handlerCheckLoginPassException(InvalidLoginPasswordException exception) {
         UserDTOResponse response = new UserDTOResponse(new Error(500, "Invalid login or password"));
-//        response.setError(new Error(500, "Invalid login or password"));
         return ResponseEntity.ok(response);
     }
 

@@ -48,11 +48,9 @@ public class DataBaseUserService implements InterfaceUserService {
         if (!utilsUserAuth.checkExistingUser(existingUser, userDTOLogin)) {
             throw new InvalidLoginPasswordException("Invalid login or password.");
         }
-        User newUser = new User();
-        newUser.setLogin(userDTOLogin.getLogin());
 
         String token = utilsRegistration.generateToken(userDTOLogin.getLogin(), userDTOLogin.getPassword());
-        userRepository.saveToken(token, String.valueOf(newUser.getUserId()));
+        userRepository.saveToken(token, String.valueOf(existingUser.getUserId()));
         return new UserDTOResponse(token);
     }
 
