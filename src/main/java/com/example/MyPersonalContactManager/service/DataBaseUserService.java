@@ -33,6 +33,7 @@ public class DataBaseUserService implements InterfaceUserService {
         userRepository.createUser(newUser);
 
         String token = utilsAuthorization.generateToken(newUser.getLogin(), newUser.getPassword());
+        userRepository.saveToken(token, String.valueOf(newUser.getUserId()));
         return new UserDTOResponse(newUser.getLogin(), token);
     }
 
