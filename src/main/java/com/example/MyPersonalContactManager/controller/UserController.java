@@ -19,12 +19,14 @@ public class UserController {
     public final InterfaceUserService dbUserService;
 
     @PostMapping(value = "/userRegistration")
-    public ResponseEntity<UserDTOResponse> userRegistration(UserDTORegister userDto) {
-        return null;
+    public ResponseEntity<UserDTOResponse> userRegistration(UserDTORegister user) {
+        UserDTORegister userRegister = new UserDTORegister(user.getLogin(), user.getPassword(), user.getName());
+        UserDTOResponse userResponse = dbUserService.registerUser(userRegister);
+        return ResponseEntity.ok(userResponse);
     }
 
     @GetMapping("/users/authUser")
-    public ResponseEntity<UserDTOResponse> userRegistration(UserDTOLogin userDto) {
+    public ResponseEntity<UserDTOResponse> userAuthorization(UserDTOLogin userDto) {
         return null;
     }
 
