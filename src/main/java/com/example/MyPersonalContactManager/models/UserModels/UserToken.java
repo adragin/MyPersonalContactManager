@@ -1,6 +1,6 @@
 package com.example.MyPersonalContactManager.models.UserModels;
 
-import com.example.MyPersonalContactManager.utils.UtilsAuthorization;
+import com.example.MyPersonalContactManager.utils.UtilsRegistration;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,7 +14,7 @@ public class UserToken extends User {
     private UUID userId;
     private LocalDateTime createDate;
     private LocalDateTime lastUpdateDate;
-    private UtilsAuthorization authUser = new UtilsAuthorization();
+    private UtilsRegistration authUser = new UtilsRegistration();
 
     public UserToken() {
         this.token = authUser.generateToken(getLogin(), getPassword());

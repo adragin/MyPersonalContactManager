@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 import static com.example.MyPersonalContactManager.utils.ConstantsContact.DEFAULT_BIRTHDAY;
 
-public class Utils {
+public class UtilsContact {
     public boolean isDateNull(LocalDate date) {
         if (date == null) {
             return true;
@@ -20,7 +20,7 @@ public class Utils {
         return false;
     }
 
-    public boolean isBirthdayDefault (LocalDate birthday) {
+    public boolean isBirthdayDefault(LocalDate birthday) {
         if (birthday.equals(DEFAULT_BIRTHDAY)) {
             return true;
         }

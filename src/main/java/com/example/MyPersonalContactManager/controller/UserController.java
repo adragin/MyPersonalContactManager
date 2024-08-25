@@ -1,5 +1,6 @@
 package com.example.MyPersonalContactManager.controller;
 
+import com.example.MyPersonalContactManager.exceptions.UserAlreadyExistsException;
 import com.example.MyPersonalContactManager.models.UserModels.UserDTOLogin;
 import com.example.MyPersonalContactManager.models.UserModels.UserDTORegister;
 import com.example.MyPersonalContactManager.models.UserModels.UserDTOResponse;
@@ -28,5 +29,11 @@ public class UserController {
         return null;
     }
 
+    //обработка исключения - проверка на существующего юзера
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<UserDTOResponse> handleException(UserAlreadyExistsException exception) {
+        UserDTOResponse body = new UserDTOResponse(exception.getMessage());
+        return ResponseEntity.ok(body);
+    }
 
 }
