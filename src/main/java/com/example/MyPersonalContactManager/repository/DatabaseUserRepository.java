@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -55,13 +54,12 @@ public class DatabaseUserRepository implements InterfaceUserRepository<User> {
     }
 
     @Override
-    public Optional<User> getUserByLogin(String login) {
+    public User getUserByLogin(String login) {
         String selectSql = "SELECT * FROM Users WHERE login = ?";
         try {
-            User user = jdbcTemplate.queryForObject(selectSql, userRowMapper, login);
-            return Optional.ofNullable(user);
+            return jdbcTemplate.queryForObject(selectSql, userRowMapper, login);
         } catch (Exception e) {
-            return Optional.empty();
+            return null;
         }
     }
 
