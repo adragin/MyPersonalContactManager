@@ -1,6 +1,6 @@
 package com.example.MyPersonalContactManager.models.ContactModels;
 
-import com.example.MyPersonalContactManager.utils.Utils;
+import com.example.MyPersonalContactManager.utils.UtilsContact;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -22,7 +22,7 @@ public class ContactDTOBig {
     @NotBlank
     private String phone;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate birthday ;
+    private LocalDate birthday;
     private String address;
     private URL photo;
     private LocalDateTime lastUpdateDate;
@@ -41,22 +41,23 @@ public class ContactDTOBig {
     public ContactDTOBig() {
         this.lastUpdateDate = LocalDateTime.now();
     }
+
     //COPY CODE
     public LocalDate getBirthday() {
-        Utils utils = new Utils();
-        if (utils.isBirthdayDefault(birthday)) {
+        UtilsContact utilsContact = new UtilsContact();
+        if (utilsContact.isBirthdayDefault(birthday)) {
             return null;
         }
         return this.birthday;
     }
+
     //COPY CODE
     public void setBirthday(LocalDate birthday) {
-        Utils utils = new Utils();
+        UtilsContact utilsContact = new UtilsContact();
 
-        if (utils.isDateNull(birthday)) {
+        if (utilsContact.isDateNull(birthday)) {
             this.birthday = DEFAULT_BIRTHDAY;
-        }
-        else this.birthday = birthday;
+        } else this.birthday = birthday;
     }
 
     @Override
