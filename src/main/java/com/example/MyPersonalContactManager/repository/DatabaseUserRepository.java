@@ -110,5 +110,20 @@ public class DatabaseUserRepository implements InterfaceUserRepository<User> {
             jdbcTemplate.update(updateTokenSql, token, LocalDateTime.now(), userId);
         }
     }
+
+    public boolean getUserRoleByToken(String token) {
+        String selectUserId = "SELECT User_Id FROM Users_Token WHERE Token = ?";
+        String userId;
+        try {
+            userId = jdbcTemplate.queryForObject(selectUserId, new Object[]{token}, String.class);
+        } catch (EmptyResultDataAccessException e) {
+            userId = "";
+        }
+        if (userId == null || userId.isEmpty()) {
+            return false;
+        }
+        String selectRole = "SELECT User_Role FROM Users WHERE User_Id = ?";
+        return Boolean.TRUE.equals(jdbcTemplate.queryForObject(selectRole, new Object[]{userId}, Boolean.class));
+    }
 }
 
