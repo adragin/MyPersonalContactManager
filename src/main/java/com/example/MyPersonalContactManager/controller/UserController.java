@@ -1,5 +1,6 @@
 package com.example.MyPersonalContactManager.controller;
 
+import com.example.MyPersonalContactManager.exceptions.EasyUserPasswordException;
 import com.example.MyPersonalContactManager.exceptions.InvalidLoginPasswordException;
 import com.example.MyPersonalContactManager.exceptions.UserAlreadyExistsException;
 import com.example.MyPersonalContactManager.models.Error;
@@ -10,6 +11,7 @@ import com.example.MyPersonalContactManager.service.InterfaceUserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -32,20 +34,20 @@ public class UserController {
         return ResponseEntity.ok(userResponse);
     }
 
-    //обработка исключения - проверка на существующего юзера
-    @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<UserDTOResponse> handleUserExistException(UserAlreadyExistsException exception) {
+
+    //обработка исключений
+    @ExceptionHandler({EasyUserPasswordException.class, InvalidLoginPasswordException.class, UserAlreadyExistsException.class})
+    public ResponseEntity<UserDTOResponse> handlerCheckDataException(Exception exception) {
         UserDTOResponse response = UserDTOResponse.builder()
-                .error(new Error(500, "User already exists"))
+                .error(new Error(500, exception.getMessage()))
                 .build();
         return ResponseEntity.ok(response);
     }
 
-    //обработка исключения - проверка пары логин-пароль
-    @ExceptionHandler(InvalidLoginPasswordException.class)
-    public ResponseEntity<UserDTOResponse> handlerCheckLoginPassException(InvalidLoginPasswordException exception) {
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<UserDTOResponse> handlerCheckLoginException(MethodArgumentNotValidException exception) {
         UserDTOResponse response = UserDTOResponse.builder()
-                .error(new Error(500, "Invalid login or password"))
+                .error(new Error(500, "You login is too easy"))
                 .build();
         return ResponseEntity.ok(response);
     }

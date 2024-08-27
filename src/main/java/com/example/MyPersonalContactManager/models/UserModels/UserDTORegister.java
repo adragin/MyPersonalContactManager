@@ -9,9 +9,9 @@ import lombok.Setter;
 @Setter
 public class UserDTORegister {
     @NotBlank
-    @Email
+    @Email(regexp = "^[A-Za-z0-9+_.-]+@(.+)$")
     private String login;
-    
+
     @NotBlank
     private String password;
     @NotBlank

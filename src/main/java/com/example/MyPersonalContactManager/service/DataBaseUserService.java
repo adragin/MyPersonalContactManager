@@ -1,5 +1,6 @@
 package com.example.MyPersonalContactManager.service;
 
+import com.example.MyPersonalContactManager.exceptions.EasyUserPasswordException;
 import com.example.MyPersonalContactManager.exceptions.InvalidLoginPasswordException;
 import com.example.MyPersonalContactManager.exceptions.UserAlreadyExistsException;
 import com.example.MyPersonalContactManager.models.UserModels.User;
@@ -29,6 +30,9 @@ public class DataBaseUserService implements InterfaceUserService {
             throw new UserAlreadyExistsException("User already exists");
         }
 
+        if (!utilsRegistration.checkCorrectPassword(userDTORegister.getPassword())) {
+            throw new EasyUserPasswordException("You password is too easy");
+        }
         User newUser = new User();
         newUser.setLogin(userDTORegister.getLogin());
         newUser.setPassword(userDTORegister.getPassword());
