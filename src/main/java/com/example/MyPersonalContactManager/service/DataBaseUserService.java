@@ -25,7 +25,7 @@ public class DataBaseUserService implements InterfaceUserService {
     @Override
     public UserDTOResponse registerUser(UserDTORegister userDTORegister) {
         User existingUser = userRepository.getUserByLogin(userDTORegister.getLogin());
-        if (utilsRegistration.checkExistingUser(existingUser)) {
+        if (utilsRegistration.checkExistingUser(existingUser, userDTORegister)) {
             throw new UserAlreadyExistsException("User already exists");
         }
 
