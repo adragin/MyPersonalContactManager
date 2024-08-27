@@ -5,7 +5,6 @@ import com.example.MyPersonalContactManager.models.UserModels.UserDTORegister;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
-import java.util.regex.Pattern;
 
 @Component
 public class UtilsRegistration {
@@ -49,10 +48,5 @@ public class UtilsRegistration {
         return true;
     }
 
-    public boolean checkCorrectLogin(String login) {
-        String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
-        Pattern pattern = Pattern.compile(emailRegex);
-        return pattern.matcher(login).matches();
-    }
-    // Добавить м по хешированию пароля
+
 }
