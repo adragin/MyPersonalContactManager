@@ -39,7 +39,7 @@ public class Contact {
         this.lastUpdateDate = LocalDateTime.now();
     }
 
-    public Contact(String firstName, String lastName, String email, List<String> phones, LocalDate birthday,
+    public Contact(String firstName, String lastName, String email, List<Phone> phones, LocalDate birthday,
                    String address, URL photo) {
         this.id = String.valueOf(UUID.randomUUID());
         this.firstName = firstName;

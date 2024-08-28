@@ -1,31 +1,72 @@
--- выполнить, если не создана БД
--- CREATE DATABASE MyPersonalCpntactManager_DB;
+-- выполнить, для пересоздания стартового набора данных
 
-USE MyPersonalCpntactManager_DB;
+-- если скрипт выполняете впервые - раскомментируйте БД с опечаткой и закомментируйте правильное название
+-- drop database MyPersonalCpntactManager_DB;
+drop database MyPersonalContactManager_DB;
 
-drop table Contacts;
+CREATE DATABASE MyPersonalContactManager_DB;
 
--- выполнить, если не создана Таблица Contacts
-CREATE TABLE Contacts
+USE MyPersonalContactManager_DB;
+
+-- drop table Contacts_Phones;
+-- drop table Contacts;
+-- drop table Users_Token;
+-- drop table Users;
+
+-- Создание таблицы Users
+CREATE TABLE Users
 (
-    id               varchar(36) PRIMARY KEY, -- добавлена опция PK
-    First_Name       VARCHAR(128) NOT NULL,
-    Last_Name        VARCHAR(128),
-    Email            varchar(50),
-    -- Phone_Id      varchar(15),          -- удален , теперь они в таблице Users_Phones
-    Birth_Day        DATE,
-    Address          VARCHAR(128),
-    Photo            varchar(100),
-    Owner_Id         varchar(36),             -- новое поле, FK
-    Create_Date      TIMESTAMP,
-    Last_Update_Date TIMESTAMP,
-    FOREIGN KEY (Owner_Id) REFERENCES Users (User_Id)
+  User_Id          varchar(36) primary key, -- добавлен PK
+  User_Role        boolean check (User_Role in (0, 1)) not null,
+  Login            varchar(128)                        not null unique,
+  Password         varchar(50)                         not null,
+  User_Name        varchar(36)                         not null,
+  Create_Date      TIMESTAMP,
+  Last_Update_Date TIMESTAMP
 );
 
+-- Тестовые Users
+INSERT INTO Users (User_Id, User_Name, Login, Password, User_Role, Create_Date, Last_Update_Date)
+VALUES ('4b3b85f1-1a3e-4c29-9b59-74c891b4b35d', 'Alex Doe', 'alexdoe@example.com', 'password123', TRUE, NOW(), NOW()),
+       ('d2b2b67e-5b2f-40a8-8b5e-c92a5b70e4d1', 'Nata Smith', 'natasmith@example.com', 'mypassword', TRUE, NOW(), NOW()),
+       ('f6c738a7-8d7d-4f1e-bb9c-d76d30b78c9d', 'Alice Johnson', 'alicejohnson@example.com', 'alicepass', FALSE, NOW(), NOW()),
+       ('c9e5d4f1-3e2a-472a-a09b-8c1b9bde1b98', 'Henry Moore', 'henrymoore@example.com', 'henrypass', FALSE, NOW(), NOW());
 
--- Тестовые контакты (учтены далее создаваемые user'ы)
-INSERT INTO Contacts (id, First_Name, Last_Name, Email, Birth_Day, Address, Photo, Owner_Id, Create_Date,
-                      Last_Update_Date)
+-- select * from Users;
+
+-- Создание таблицы Users_Token
+CREATE TABLE Users_Token
+(
+  Token            varchar(256) unique,
+  User_Id          varchar(36), -- FK -> Users (User_Id)
+  Create_Date      TIMESTAMP,
+  Last_Update_Date TIMESTAMP,
+  FOREIGN KEY (User_Id) REFERENCES Users (User_Id)
+);
+
+-- Тестовая запись Users_Token
+INSERT INTO Users_Token (Token, User_Id, Create_Date, Last_Update_Date)
+VALUES ('001{alexdoe@example.com|password123}', '4b3b85f1-1a3e-4c29-9b59-74c891b4b35d', now(), now());
+
+-- Таблица Contacts
+CREATE TABLE Contacts
+(
+  id               varchar(36) PRIMARY KEY, -- добавлена опция PK
+  First_Name       VARCHAR(128) NOT NULL,
+  Last_Name        VARCHAR(128),
+  Email            varchar(50),
+  -- Phone_Id      varchar(15),          -- удален , теперь они в таблице Users_Phones
+  Birth_Day        DATE,
+  Address          VARCHAR(128),
+  Photo            varchar(100),
+  Owner_Id         varchar(36),             -- новое поле, FK
+  Create_Date      TIMESTAMP,
+  Last_Update_Date TIMESTAMP,
+  FOREIGN KEY (Owner_Id) REFERENCES Users (User_Id)
+);
+
+-- Тестовые контакты (учтены ранее создаваемые user'ы в качестве Owner_Id)
+INSERT INTO Contacts (id, First_Name, Last_Name, Email, Birth_Day, Address, Photo, Owner_Id, Create_Date, Last_Update_Date)
 VALUES ('52e61735-fcbf-481c-9134-edce167cb94e', 'New', 'TestContact', 'test@example.com', '1980-01-01', 'New York, USA',
         'https://i.imgur.com/yold5nS.png', '4b3b85f1-1a3e-4c29-9b59-74c891b4b35d', '2024-08-26 23:16:53', '2024-08-26 23:16:53'),
        ('8c1a6e76-e831-43f4-b27b-f7e7c70a146f', 'New', 'TestContact', 'test@example.com', '1980-01-01', 'New York, USA',
@@ -97,21 +138,22 @@ VALUES ('52e61735-fcbf-481c-9134-edce167cb94e', 'New', 'TestContact', 'test@exam
        ('d65abe1f-60bd-11ef-8672-fc5ceea01bf6', 'Ella', 'Brown', 'ella.brown@example.com', '1990-01-01', '456 Elm St, Anytown',
         'https://i.imgur.com/yold5nS.png', 'c9e5d4f1-3e2a-472a-a09b-8c1b9bde1b98', '2024-08-22 21:36:33', '2024-08-22 21:36:33');
 
-select *
-from Contacts;
+-- select * from Contacts;
 
 CREATE TABLE Contacts_Phones
 (
-    id           integer AUTO_INCREMENT PRIMARY KEY, -- PK
-    Contact_Id   varchar(36) unique,                 -- FK
-    Phone_Number varchar(28),
-    FOREIGN KEY (Contact_Id) REFERENCES Contacts (id)
+  id           integer AUTO_INCREMENT PRIMARY KEY, -- PK
+  Contact_Id   varchar(36),                        -- FK
+  Phone_Number varchar(28),
+  FOREIGN KEY (Contact_Id) REFERENCES Contacts (id)
 );
 
 INSERT INTO Contacts_Phones (Contact_Id, Phone_Number)
 VALUES ('52e61735-fcbf-481c-9134-edce167cb94e', '(213) 555-0173'),
        ('8c1a6e76-e831-43f4-b27b-f7e7c70a146f', '(310) 555-0937'),
        ('a55b821e-6004-11ef-8672-fc5ceea01bf6', '(415) 555-0841'),
+       ('a55b821e-6004-11ef-8672-fc5ceea01bf6', '(646) 555-8888'),
+       ('a55b821e-6004-11ef-8672-fc5ceea01bf6', '(212) 555-8888'),
        ('a55b9d7b-6004-11ef-8672-fc5ceea01bf6', '(646) 555-0238'),
        ('a55ba262-6004-11ef-8672-fc5ceea01bf6', '(212) 555-0156'),
        ('a55ba9a1-6004-11ef-8672-fc5ceea01bf6', '(718) 555-0465'),
@@ -137,44 +179,9 @@ VALUES ('52e61735-fcbf-481c-9134-edce167cb94e', '(213) 555-0173'),
        ('d65abdbb-60bd-11ef-8672-fc5ceea01bf6', '(503) 555-0387'),
        ('d65abe1f-60bd-11ef-8672-fc5ceea01bf6', '(813) 555-0839');
 
+-- select * from Contacts_Phones;
 
-select *
-from Contacts_Phones;
 
--- Создание таблиц Users and Users_Token в вашей БД
-CREATE TABLE Users
-(
-    User_Id          varchar(36) primary key, -- добавлен PK
-    User_Role        boolean check (User_Role in (0, 1)) not null,
-    Login            varchar(128)                        not null unique,
-    Password         varchar(50)                         not null,
-    User_Name        varchar(36)                         not null,
-    Create_Date      TIMESTAMP,
-    Last_Update_Date TIMESTAMP
-);
-
--- Тестовые users
-INSERT INTO Users (User_Id, User_Name, Login, Password, User_Role, Create_Date, Last_Update_Date)
-VALUES ('4b3b85f1-1a3e-4c29-9b59-74c891b4b35d', 'Alex Doe', 'alexdoe@example.com', 'password123', TRUE, NOW(), NOW()),
-       ('d2b2b67e-5b2f-40a8-8b5e-c92a5b70e4d1', 'Nata Smith', 'natasmith@example.com', 'mypassword', TRUE, NOW(), NOW()),
-       ('f6c738a7-8d7d-4f1e-bb9c-d76d30b78c9d', 'Alice Johnson', 'alicejohnson@example.com', 'alicepass', FALSE, NOW(), NOW()),
-       ('c9e5d4f1-3e2a-472a-a09b-8c1b9bde1b98', 'Henry Moore', 'henrymoore@example.com', 'henrypass', FALSE, NOW(), NOW());
-
-select *
-from Users;
-
-CREATE TABLE Users_Token
-(
-    Token            varchar(256) unique,
-    User_Id          varchar(36), -- FK -> Users (User_Id)
-    Create_Date      TIMESTAMP,
-    Last_Update_Date TIMESTAMP,
-    FOREIGN KEY (User_Id) REFERENCES Users (User_Id)
-);
-
--- Тестовая запись Users_Token
-INSERT INTO Users_Token (Token, User_Id, Create_Date, Last_Update_Date)
-VALUES ('001{alexdoe@example.com|password123}', '4b3b85f1-1a3e-4c29-9b59-74c891b4b35d', now(), now());
 
 
 
