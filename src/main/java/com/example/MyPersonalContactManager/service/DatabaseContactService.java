@@ -19,16 +19,32 @@ public class DatabaseContactService implements ContactServiceInterface<Contact, 
     private DatabaseContactRepository dbRepository;
 
     @Override
-    public Contact getContactById(String contactId) {
-        Contact tempContact = dbRepository.getContactById(contactId);
-        List<Phone> phoneList = dbRepository.getPhoneListByContactId(contactId);
-        tempContact.setPhones(phoneList);
+    public List<Contact> getContactById(String contactId) {
+        List<Contact> tempContact = dbRepository.getContactByContactId(contactId);
+        for (int i = 0; i < tempContact.size(); i++) {
+            List<Phone> phoneList = dbRepository.getPhoneListByContactId(contactId);
+            tempContact.get(i).setPhones(phoneList);
+        }
+        return tempContact;
+    }
+
+    public List<Contact> getContactByUserId(String userId) {
+        List<Contact> tempContact = dbRepository.getContactByUserId(userId);
+        for (int i = 0; i < tempContact.size(); i++) {
+            List<Phone> phoneList = dbRepository.getPhoneListByContactId(tempContact.get(i).getId());
+            tempContact.get(i).setPhones(phoneList);
+        }
         return tempContact;
     }
 
     @Override
     public List<Contact> getAllContacts() {
-        return dbRepository.getAllContacts().stream().toList();
+        List<Contact> tempListAllContacts = dbRepository.getAllContacts();
+        for (int i = 0; i < tempListAllContacts.size(); i++) {
+            List<Phone> phoneList = dbRepository.getPhoneListByContactId(tempListAllContacts.get(i).getId());
+            tempListAllContacts.get(i).setPhones(phoneList);
+        }
+        return tempListAllContacts;
     }
 
     @Override

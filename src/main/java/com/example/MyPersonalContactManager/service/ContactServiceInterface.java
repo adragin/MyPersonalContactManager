@@ -3,7 +3,7 @@ package com.example.MyPersonalContactManager.service;
 import java.util.List;
 
 public interface ContactServiceInterface<T, U> {
-    T getContactById(String id);
+    List<T> getContactById(String id);
 
     List<T> getAllContacts();
 

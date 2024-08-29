@@ -106,9 +106,14 @@ public class DatabaseContactRepository implements ContactRepositoryInterface<Con
     }
 
     @Override
-    public Contact getContactById(String contactId) {
+    public List<Contact> getContactByContactId(String contactId) {
         String selectSql = "SELECT * FROM Contacts WHERE id = ?";
-        return jdbcTemplate.queryForObject(selectSql, contactRowMapper, contactId);
+        return jdbcTemplate.query(selectSql, contactRowMapper, contactId);
+    }
+
+    public List<Contact> getContactByUserId(String userId) {
+        String selectSql = "SELECT * FROM Contacts WHERE Owner_Id = ?";
+        return jdbcTemplate.query(selectSql, contactRowMapper, userId);
     }
 
     public List<Phone> getPhoneListByContactId(String contactId) {
