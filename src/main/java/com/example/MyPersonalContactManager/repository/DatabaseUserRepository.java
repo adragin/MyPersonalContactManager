@@ -125,5 +125,14 @@ public class DatabaseUserRepository implements InterfaceUserRepository<User> {
         String selectRole = "SELECT User_Role FROM Users WHERE User_Id = ?";
         return Boolean.TRUE.equals(jdbcTemplate.queryForObject(selectRole, new Object[]{userId}, Boolean.class));
     }
+
+    public String getUserIdByToken(String token) {
+        String selectUserId = "SELECT User_Id FROM Users_Token WHERE Token = ?";
+        try {
+            return jdbcTemplate.queryForObject(selectUserId, new Object[]{token}, String.class);
+        } catch (EmptyResultDataAccessException e) {
+            return "";
+        }
+    }
 }
 

@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/MyPersonalContactManager")
 public class ContactController {
@@ -24,37 +26,54 @@ public class ContactController {
     private DatabaseContactService dbService;
 
     @PostMapping(value = "/createContact", consumes = "application/json")
-    public ResponseEntity<ResponseAPI> crateContact(@RequestHeader("Authorization") String token,
-                                                    @Valid @RequestBody RequestBodyClient requestBodyClient) {
+    public ResponseEntity<ResponseAPI> crateContact(@Valid @RequestBody RequestBodyClient requestBodyClient) {
+        Contact contact = dbService.createContact(requestBodyClient.contact);
+        responseAPI.response = contact;
+        return ResponseEntity.ok(responseAPI);
+    }
+
+    @GetMapping("/contacts/{id}")
+    public ResponseEntity<ResponseAPI> getContactById(@RequestHeader("GetContacts") String token,
+                                                      @PathVariable String id) {
         if (token == null || token.isEmpty()) {
             responseAPI.response = new Error(400, "Authorization header is missing.");
             return ResponseEntity.badRequest().body(responseAPI);
         }
-
         boolean userRole = dbUserRepository.getUserRoleByToken(token);
-        responseAPI = new ResponseAPI();
-        if (userRole) {
-            Contact contact = dbService.createContact(requestBodyClient.contact);
+        Contact contact = dbService.getContactById(id);
+        String user = dbUserRepository.getUserIdByToken(token);
+
+        if (!user.equals(contact.getUserOwner) || userRole) {
             responseAPI.response = contact;
             return ResponseEntity.ok(responseAPI);
         } else {
             responseAPI.response = new Error(403, "Access denied.");
             return ResponseEntity.ok(responseAPI);
         }
-    }
-
-    @GetMapping("/contacts/{id}")
-    public ResponseEntity<ResponseAPI> getContactById(@PathVariable String id) {
-        responseAPI = new ResponseAPI();
-        Contact contact = dbService.getContactById(id);
-        responseAPI.response = contact;
+        responseAPI.response = new Error(204, "No Content");
         return ResponseEntity.ok(responseAPI);
     }
 
     @GetMapping(value = "/contacts")
-    public ResponseEntity<ResponseAPI> getAllContacts() {
-        responseAPI = new ResponseAPI();
-        responseAPI.response = dbService.getAllContacts().toArray();
+    public ResponseEntity<ResponseAPI> getAllContacts(@RequestHeader("GetContacts") String token) {
+        if (token == null || token.isEmpty()) {
+            responseAPI.response = new Error(400, "Authorization header is missing.");
+            return ResponseEntity.badRequest().body(responseAPI);
+        }
+        boolean userRole = dbUserRepository.getUserRoleByToken(token);
+        List<Contact> contactList = dbService.getAllContacts();
+        String user = dbUserRepository.getUserIdByToken(token);
+
+        for (int i = 0; i < contactList.size(); i++) {
+            if (!user.equals(contactList.get(i).getUserOwner) || userRole) {
+                responseAPI.response = contactList;
+                return ResponseEntity.ok(responseAPI);
+            } else {
+                responseAPI.response = new Error(403, "Access denied.");
+                return ResponseEntity.ok(responseAPI);
+            }
+        }
+        responseAPI.response = new Error(204, "No Content");
         return ResponseEntity.ok(responseAPI);
     }
 
