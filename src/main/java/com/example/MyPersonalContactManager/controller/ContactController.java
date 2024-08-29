@@ -30,7 +30,7 @@ public class ContactController {
     @PostMapping(value = "/createContact", consumes = "application/json")
     public ResponseEntity<ResponseAPI> crateContact(@Valid @RequestBody RequestBodyClient requestBodyClient,
                                                     @RequestHeader("crateContact") String token) {
-        if (token == null) {
+        if (token == null || token.isEmpty()) {
             responseAPI.response = new Error(400, "Authorization header is missing.");
             return ResponseEntity.badRequest().body(responseAPI);
         }
@@ -44,15 +44,16 @@ public class ContactController {
     @GetMapping("/contacts/{id}")
     public ResponseEntity<ResponseAPI> getContactById(@RequestHeader("GetContacts") String token,
                                                       @PathVariable String id) {
+        responseAPI = new ResponseAPI();
         if (token == null || token.isEmpty()) {
             responseAPI.response = new Error(400, "Authorization header is missing.");
             return ResponseEntity.badRequest().body(responseAPI);
         }
         boolean userRole = dbUserService.getUserRoleByToken(token);
-        String user = dbUserService.getUserIdByToken(token);
+        String userId = dbUserService.getUserIdByToken(token);
         Contact contact = dbContactService.getContactById(id);
 
-        if (!user.equals(contact.getOwnerId()) || userRole) {
+        if (userId.equals(contact.getOwnerId()) || userRole) {
             responseAPI.response = contact;
         } else {
             responseAPI.response = new Error(403, "Access denied.");
@@ -62,11 +63,13 @@ public class ContactController {
 
     @GetMapping(value = "/contacts")
     public ResponseEntity<ResponseAPI> getAllContacts(@RequestHeader("GetContacts") String token) {
+        responseAPI = new ResponseAPI();
         if (token == null || token.isEmpty()) {
             responseAPI.response = new Error(400, "Authorization header is missing.");
             return ResponseEntity.badRequest().body(responseAPI);
         }
         boolean userRole = dbUserService.getUserRoleByToken(token);
+//        String userId = dbUserService.getUserIdByToken(token);
         List<Contact> contactList = dbContactService.getAllContacts();
         String user = dbUserService.getUserIdByToken(token);
 
