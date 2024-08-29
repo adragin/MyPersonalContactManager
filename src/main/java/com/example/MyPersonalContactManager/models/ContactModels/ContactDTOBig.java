@@ -9,6 +9,7 @@ import lombok.Setter;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static com.example.MyPersonalContactManager.utils.ConstantsContact.DEFAULT_BIRTHDAY;
 
@@ -20,18 +21,18 @@ public class ContactDTOBig {
     private String lastName;
     private String email;
     @NotBlank
-    private String phone;
+    private List<String> phones;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate birthday;
     private String address;
     private URL photo;
     private LocalDateTime lastUpdateDate;
 
-    public ContactDTOBig(String firstName, String lastName, String email, String phone, LocalDate birthday, String address, URL photo) {
+    public ContactDTOBig(String firstName, String lastName, String email, List<String> phones, LocalDate birthday, String address, URL photo) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.phone = phone;
+        this.phones = phones;
         this.birthday = birthday;
         this.address = address;
         this.photo = photo;
@@ -66,7 +67,7 @@ public class ContactDTOBig {
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
+                ", phone='" + phones + '\'' +
                 ", birthday=" + birthday +
                 ", address='" + address + '\'' +
                 ", photo=" + photo +
