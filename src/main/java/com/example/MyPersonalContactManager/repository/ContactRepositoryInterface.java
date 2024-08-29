@@ -9,7 +9,7 @@ public interface ContactRepositoryInterface<T, U> {
 
     Contact createContact(Contact contact, String userID);
 
-    List<T> getContactByContactId(String id);
+    T getContactByContactId(String id);
 
     List<T> getAllContacts();
 
