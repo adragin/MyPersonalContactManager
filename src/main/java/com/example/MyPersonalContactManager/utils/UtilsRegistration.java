@@ -5,12 +5,21 @@ import com.example.MyPersonalContactManager.models.UserModels.UserDTORegister;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
+import java.util.Random;
 
 @Component
 public class UtilsRegistration {
     public String generateToken(String login, String password) {
 
-        return "001{" + login + "|" + password + "}";
+        Random random = new Random();
+        StringBuilder randomFiveDigits = new StringBuilder();
+
+        //генерация первых 5 случайных цифр
+        for (int i = 0; i < 5; i++) {
+            randomFiveDigits.append(random.nextInt(10));
+        }
+
+        return randomFiveDigits.toString() + "{" + login + "|" + password + "}";
     }
 
     public boolean checkExistingUser(User user, UserDTORegister userDTORegister) {
