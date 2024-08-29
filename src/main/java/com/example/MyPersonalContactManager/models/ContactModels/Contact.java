@@ -9,6 +9,7 @@ import lombok.Setter;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import static com.example.MyPersonalContactManager.utils.ConstantsContact.DEFAULT_BIRTHDAY;
@@ -22,11 +23,12 @@ public class Contact {
     private String lastName;
     private String email;
     @NotBlank
-    private String phone;
+    private List<Phone> phones;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate birthday;
     private String address;
     private URL photo;
+    private String ownerId;
     private LocalDateTime createDate;
     @Setter
     private LocalDateTime lastUpdateDate;
@@ -37,13 +39,13 @@ public class Contact {
         this.lastUpdateDate = LocalDateTime.now();
     }
 
-    public Contact(String firstName, String lastName, String email, String phone, LocalDate birthday,
+    public Contact(String firstName, String lastName, String email, List<Phone> phones, LocalDate birthday,
                    String address, URL photo) {
         this.id = String.valueOf(UUID.randomUUID());
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.phone = phone;
+        this.phones = phones;
         this.birthday = birthday;
         this.address = address;
         this.photo = photo;
@@ -76,7 +78,7 @@ public class Contact {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
+                ", phone='" + phones + '\'' +
                 ", birthday=" + birthday +
                 ", address='" + address + '\'' +
                 ", photo=" + photo +

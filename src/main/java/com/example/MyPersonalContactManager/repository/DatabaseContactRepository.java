@@ -28,7 +28,6 @@ public class DatabaseContactRepository implements ContactRepositoryInterface<Con
         contact.setFirstName(rs.getString("First_Name"));
         contact.setLastName(rs.getString("Last_Name"));
         contact.setEmail(rs.getString("Email"));
-        contact.setPhone(rs.getString("Phone"));
         contact.setBirthday(rs.getDate("Birth_Day").toLocalDate());
         contact.setAddress(rs.getString("Address"));
         contact.setPhoto(rs.getURL("Photo"));
@@ -92,7 +91,7 @@ public class DatabaseContactRepository implements ContactRepositoryInterface<Con
 
     @Override
     public ContactDTOBig updateContact(String id, ContactDTOBig newContact) {
-        String sql = "update Contacts " +
+        String sql = "UPDATE Contacts " +
                 "set First_Name = ? , Last_Name = ? , Email = ?, Phone = ?, Birth_Day = ?,Address = ?,  " +
                 "Photo = ?, Last_Update_Date = ? where id = ?";
 
