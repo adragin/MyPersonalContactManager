@@ -3,15 +3,18 @@ package com.example.MyPersonalContactManager.models.RequestResponseModels;
 import com.example.MyPersonalContactManager.models.ContactModels.Contact;
 import com.example.MyPersonalContactManager.models.ContactModels.ContactDTOBig;
 import com.example.MyPersonalContactManager.models.ContactModels.ContactDTOShort;
+import com.example.MyPersonalContactManager.models.ContactModels.Phone;
 import jakarta.validation.Valid;
 
 import java.util.List;
 
-public class RequestBodyClient{
+public class RequestBodyClient {
     @Valid
     public Contact contact;
     public ContactDTOShort contactDTOShort;
     public ContactDTOBig contactDTOBig;
+    public String userId;
+    public List<Phone> phoneNumberList;
 
     public List<Contact> contactList;
 

@@ -65,7 +65,7 @@ public class DataBaseUserService implements InterfaceUserService {
 
     @Override
     public User getUserById(String userId) {
-        return userRepository.getUserById(userId);
+        return userRepository.getUserById(String.valueOf(userId));
     }
 
     @Override
@@ -86,5 +86,16 @@ public class DataBaseUserService implements InterfaceUserService {
     @Override
     public String generateToken(String login, String password) {
         return utilsRegistration.generateToken(login, password);
+    }
+
+    @Override
+    public String getUserIdByToken(String token) {
+
+        return userRepository.getUserIdByToken(token);
+    }
+
+    @Override
+    public boolean getUserRoleByToken(String token) {
+        return userRepository.getUserRoleByToken(token);
     }
 }

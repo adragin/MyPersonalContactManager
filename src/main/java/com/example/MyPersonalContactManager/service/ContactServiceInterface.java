@@ -2,11 +2,14 @@ package com.example.MyPersonalContactManager.service;
 
 import java.util.List;
 
-public interface ContactServiceInterface <T,U> {
-    T getContactById (String id);
-    List<T> getAllContacts();
-    T createContact(T contactDTO);
+public interface ContactServiceInterface<T, U> {
+    T getContactById(String id);
 
-    U updateContact (String id, U newContact);
+    List<T> getAllContacts();
+
+    T createContact(T contactDTO, String userID);
+
+    U updateContact(String id, U newContact);
+
     boolean deleteContactById(String id);
 }

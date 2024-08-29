@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 @Repository
 public class DatabaseUserRepository implements InterfaceUserRepository<User> {
@@ -23,7 +22,7 @@ public class DatabaseUserRepository implements InterfaceUserRepository<User> {
 
     private final RowMapper<User> userRowMapper = (rs, rowNum) -> {
         User user = new User();
-        user.setUserId(UUID.fromString(rs.getString("User_Id")));
+        user.setUserId((rs.getString("User_Id")));
         user.setUserName(rs.getString("User_Name"));
         user.setLogin(rs.getString("Login"));
         user.setPassword(rs.getString("Password"));
@@ -126,6 +125,7 @@ public class DatabaseUserRepository implements InterfaceUserRepository<User> {
         return Boolean.TRUE.equals(jdbcTemplate.queryForObject(selectRole, new Object[]{userId}, Boolean.class));
     }
 
+    @Override
     public String getUserIdByToken(String token) {
         String selectUserId = "SELECT User_Id FROM Users_Token WHERE Token = ?";
         try {

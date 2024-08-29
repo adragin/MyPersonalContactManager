@@ -1,11 +1,19 @@
 package com.example.MyPersonalContactManager.repository;
 
+import com.example.MyPersonalContactManager.models.ContactModels.Contact;
+
 import java.util.List;
 
-public interface ContactRepositoryInterface <T,U>{
-    T createContact(T contact);
-    T getContactById (String id);
+public interface ContactRepositoryInterface<T, U> {
+    T createContact(T contact, String UserId);
+
+    Contact createContact(Contact contact, String userID);
+
+    T getContactById(String id);
+
     List<T> getAllContacts();
-    U updateContact (String id, U newContact);
+
+    U updateContact(String id, U newContact);
+
     boolean deleteContactById(String id);
 }

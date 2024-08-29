@@ -5,13 +5,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Setter
 @Getter
 public class UserToken extends User {
     private final String token;
-    private UUID userId;
+    private String userId;
     private LocalDateTime createDate;
     private LocalDateTime lastUpdateDate;
     private UtilsRegistration authUser = new UtilsRegistration();

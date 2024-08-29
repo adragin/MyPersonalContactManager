@@ -22,6 +22,10 @@ public interface InterfaceUserService {
     UserDTOResponse updateUser(User user);
 
     String generateToken(String login, String password);
+
+    String getUserIdByToken(String token);
+
+    boolean getUserRoleByToken(String token);
 }
 
 
