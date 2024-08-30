@@ -67,23 +67,20 @@ public class ContactController {
             responseAPI.response = new Error(400, "Authorization header is missing.");
             return ResponseEntity.badRequest().body(responseAPI);
         }
+
         boolean userRole = dbUserService.getUserRoleByToken(token);
         String userId = dbUserService.getUserIdByToken(token);
 
-        List<Contact> allContacts = dbContactService.getAllContacts();
-        List<Contact> contactListByUserId = dbContactService.getContactByUserId(userId);
-
-        for (int i = 0; i < allContacts.size(); i++) {
-            if (userId.equals(allContacts.get(i).getOwnerId())) {
-                responseAPI.response = contactListByUserId;
-            } else if (userRole) {
-                responseAPI.response = allContacts;
-            } else {
-                responseAPI.response = new Error(403, "Access denied.");
-            }
-            return ResponseEntity.ok(responseAPI);
+        if (userId.isEmpty()) {
+            responseAPI.response = new Error(403, "Access denied.");
+        } else if (userRole) {
+            List<Contact> allContacts = dbContactService.getAllContacts();
+            responseAPI.response = allContacts;
+        } else {
+            List<Contact> contactListByUserId = dbContactService.getContactByUserId(userId);
+            responseAPI.response = contactListByUserId;
         }
-        responseAPI.response = new Error(204, "No Content");
+
         return ResponseEntity.ok(responseAPI);
     }
 
