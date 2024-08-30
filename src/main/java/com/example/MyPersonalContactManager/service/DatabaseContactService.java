@@ -2,6 +2,7 @@ package com.example.MyPersonalContactManager.service;
 
 import com.example.MyPersonalContactManager.models.ContactModels.Contact;
 import com.example.MyPersonalContactManager.models.ContactModels.ContactDTOBig;
+import com.example.MyPersonalContactManager.models.ContactModels.Phone;
 import com.example.MyPersonalContactManager.repository.DatabaseContactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,19 +19,38 @@ public class DatabaseContactService implements ContactServiceInterface<Contact, 
     private DatabaseContactRepository dbRepository;
 
     @Override
-    public Contact getContactById(String id) {
-        return dbRepository.getContactById(id);
+    public Contact getContactById(String contactId) {
+        Contact tempContact = dbRepository.getContactByContactId(contactId);
+        List<Phone> phoneList = dbRepository.getPhoneListByContactId(contactId);
+        tempContact.setPhones(phoneList);
+        return tempContact;
+    }
+
+    public List<Contact> getContactByUserId(String userId) {
+        List<Contact> tempContact = dbRepository.getContactByUserId(userId);
+        for (int i = 0; i < tempContact.size(); i++) {
+            List<Phone> phoneList = dbRepository.getPhoneListByContactId(tempContact.get(i).getId());
+            tempContact.get(i).setPhones(phoneList);
+        }
+        return tempContact;
     }
 
     @Override
     public List<Contact> getAllContacts() {
-        return dbRepository.getAllContacts().stream().toList();
+        List<Contact> tempListAllContacts = dbRepository.getAllContacts();
+        for (int i = 0; i < tempListAllContacts.size(); i++) {
+            List<Phone> phoneList = dbRepository.getPhoneListByContactId(tempListAllContacts.get(i).getId());
+            tempListAllContacts.get(i).setPhones(phoneList);
+        }
+        return tempListAllContacts;
     }
 
     @Override
-    public Contact createContact(Contact contact) {
-        dbRepository.createContact(contact);
-        return contact;
+    public Contact createContact(Contact contact, String userID) {
+        Contact tempContact = dbRepository.createContact(contact, userID);
+        List<Phone> phoneList = dbRepository.createPhone(contact.getPhones(), tempContact.getId());
+        tempContact.setPhones(phoneList);
+        return tempContact;
     }
 
     @Override

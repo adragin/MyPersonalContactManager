@@ -145,6 +145,8 @@ CREATE TABLE Contacts_Phones
   id           integer AUTO_INCREMENT PRIMARY KEY, -- PK
   Contact_Id   varchar(36),                        -- FK
   Phone_Number varchar(28),
+  Create_Date      TIMESTAMP,
+  Last_Update_Date TIMESTAMP,
   FOREIGN KEY (Contact_Id) REFERENCES Contacts (id)
 );
 

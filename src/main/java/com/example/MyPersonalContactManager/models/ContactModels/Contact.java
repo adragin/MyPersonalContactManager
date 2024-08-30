@@ -3,12 +3,14 @@ package com.example.MyPersonalContactManager.models.ContactModels;
 import com.example.MyPersonalContactManager.utils.UtilsContact;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,7 +24,7 @@ public class Contact {
     private String firstName;
     private String lastName;
     private String email;
-    @NotBlank
+    @NotEmpty
     private List<Phone> phones;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate birthday;
@@ -71,6 +73,10 @@ public class Contact {
         } else this.birthday = birthday;
     }
 
+    public void setPhones(List<Phone> phones) {
+        this.phones = new ArrayList<>(phones);
+    }
+
     @Override
     public String toString() {
         return "Contact{" +
@@ -84,5 +90,8 @@ public class Contact {
                 ", photo=" + photo +
                 ", createDate=" + createDate +
                 ", updateDate=" + lastUpdateDate;
+    }
+
+    public void setPhone(List<String> phoneList) {
     }
 }

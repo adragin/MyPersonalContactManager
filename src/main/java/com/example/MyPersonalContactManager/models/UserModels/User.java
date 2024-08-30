@@ -11,7 +11,7 @@ import java.util.UUID;
 @Getter
 @Setter
 public class User {
-    private UUID userId;
+    private String userId;
     @NotBlank
     private Boolean role; // true->admin, false->user
     @NotBlank
@@ -25,13 +25,13 @@ public class User {
     private LocalDateTime lastUpdateDate;
 
     public User() {
-        this.userId = UUID.randomUUID();
+        this.userId = String.valueOf(UUID.randomUUID());
         this.createDate = LocalDateTime.now();
         this.lastUpdateDate = LocalDateTime.now();
     }
 
     public User(Boolean role, String login, String password, String userName) {
-        this.userId = UUID.randomUUID();
+        this.userId = String.valueOf(UUID.randomUUID());
         this.role = role;
         this.login = login;
         this.password = password;

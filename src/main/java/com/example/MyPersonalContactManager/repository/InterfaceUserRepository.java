@@ -19,5 +19,9 @@ public interface InterfaceUserRepository<T> {
     String getToken(String userId);
 
     void saveToken(String token, String userId);
+
+    String getUserIdByToken(String token);
+
+    boolean getUserRoleByToken(String token);
 }
 

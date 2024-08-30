@@ -2,6 +2,7 @@ package com.example.MyPersonalContactManager.repository;
 
 import com.example.MyPersonalContactManager.models.ContactModels.Contact;
 import com.example.MyPersonalContactManager.models.ContactModels.ContactDTOBig;
+import com.example.MyPersonalContactManager.models.ContactModels.Phone;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -31,6 +32,7 @@ public class DatabaseContactRepository implements ContactRepositoryInterface<Con
         contact.setBirthday(rs.getDate("Birth_Day").toLocalDate());
         contact.setAddress(rs.getString("Address"));
         contact.setPhoto(rs.getURL("Photo"));
+        contact.setOwnerId(rs.getString("Owner_Id"));
         contact.setCreateDate(rs.getTimestamp("Create_Date").toLocalDateTime());
         contact.setLastUpdateDate(rs.getTimestamp("Last_Update_Date").toLocalDateTime());
         return contact;
@@ -40,7 +42,6 @@ public class DatabaseContactRepository implements ContactRepositoryInterface<Con
         contactDTO.setFirstName(rs.getString("First_Name"));
         contactDTO.setLastName(rs.getString("Last_Name"));
         contactDTO.setEmail(rs.getString("Email"));
-        contactDTO.setPhone(rs.getString("Phone"));
         contactDTO.setBirthday(rs.getDate("Birth_Day").toLocalDate());
         contactDTO.setAddress(rs.getString("Address"));
         contactDTO.setPhoto(rs.getURL("Photo"));
@@ -48,36 +49,76 @@ public class DatabaseContactRepository implements ContactRepositoryInterface<Con
         return contactDTO;
     };
 
+    private final RowMapper<Phone> phoneRowMapper = (rs, rowNum) -> {
+        Phone phone = new Phone();
+        phone.setId(rs.getString("id"));
+        phone.setPhoneNumber(rs.getString("Phone_Number"));
+        phone.setCreateDate(rs.getTimestamp("Create_Date").toLocalDateTime());
+        phone.setLastUpdateDate(rs.getTimestamp("Last_Update_Date").toLocalDateTime());
+        return phone;
+    };
+
     @Override
-    public Contact createContact(Contact contact) {
-        String sql = "INSERT INTO Contacts (id, First_Name, Last_Name, Email, Phone, Birth_Day, " +
-                "Address, Photo, Create_Date, Last_Update_Date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        KeyHolder keyHolder = new GeneratedKeyHolder();
+    public Contact createContact(Contact contact, String userID) {
+        String sqlContacts = "INSERT INTO Contacts (id, First_Name, Last_Name, Email, Birth_Day, " +
+                "Address, Photo, Owner_Id, Create_Date, Last_Update_Date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        KeyHolder keyHolderForContacts = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = connection.prepareStatement(sqlContacts, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, contact.getId());
             ps.setString(2, contact.getFirstName());
             ps.setString(3, contact.getLastName());
             ps.setString(4, contact.getEmail());
-            ps.setString(5, contact.getPhone());
-            ps.setString(6, String.valueOf(contact.getBirthday()));
-            ps.setString(7, contact.getAddress());
-            ps.setString(8, String.valueOf(contact.getPhoto()));
-            ps.setString(9, String.valueOf(contact.getCreateDate()));
+            ps.setString(5, String.valueOf(contact.getBirthday()));
+            ps.setString(6, contact.getAddress());
+            ps.setString(7, String.valueOf(contact.getPhoto()));
+            ps.setString(8, String.valueOf(userID));
+            ps.setString(9, String.valueOf((contact.getCreateDate())));
             ps.setString(10, String.valueOf(contact.getLastUpdateDate()));
 
             return ps;
-        }, keyHolder);
+        }, keyHolderForContacts);
 
         String selectSql = "SELECT * FROM Contacts WHERE id = ?";
         return jdbcTemplate.queryForObject(selectSql, contactRowMapper, contact.getId());
 
     }
 
+    public List<Phone> createPhone(List<Phone> phoneList, String contactId) {
+        String sqlPhoneNumbers = "INSERT INTO Contacts_Phones (Contact_Id, Phone_Number, Create_Date, Last_Update_Date)" +
+                "VALUES (?, ?, ?, ?)";
+
+
+        for (Phone phone : phoneList) {
+            KeyHolder keyHolderForPhoneNumbers = new GeneratedKeyHolder();
+            jdbcTemplate.update(connection -> {
+                PreparedStatement ps = connection.prepareStatement(sqlPhoneNumbers, Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, contactId);
+                ps.setString(2, phone.getPhoneNumber());
+                ps.setString(3, String.valueOf(phone.getCreateDate().toLocalDate()));
+                ps.setString(4, String.valueOf(phone.getLastUpdateDate().toLocalDate()));
+                return ps;
+            }, keyHolderForPhoneNumbers);
+        }
+        String selectSql = "SELECT * FROM Contacts_Phones WHERE Contact_Id = ?";
+        return jdbcTemplate.query(selectSql, phoneRowMapper, contactId);
+    }
+
     @Override
-    public Contact getContactById(String id) {
+    public Contact getContactByContactId(String contactId) {
         String selectSql = "SELECT * FROM Contacts WHERE id = ?";
-        return jdbcTemplate.queryForObject(selectSql, contactRowMapper, id);
+        return jdbcTemplate.queryForObject(selectSql, contactRowMapper, contactId);
+    }
+
+    public List<Contact> getContactByUserId(String userId) {
+        String selectSql = "SELECT * FROM Contacts WHERE Owner_Id = ?";
+        return jdbcTemplate.query(selectSql, contactRowMapper, userId);
+    }
+
+    public List<Phone> getPhoneListByContactId(String contactId) {
+        String selectSql = "SELECT * FROM Contacts_Phones WHERE Contact_Id = ?";
+        return jdbcTemplate.query(selectSql, phoneRowMapper, contactId);
     }
 
     @Override
@@ -101,7 +142,6 @@ public class DatabaseContactRepository implements ContactRepositoryInterface<Con
             ps.setString(1, newContact.getFirstName());
             ps.setString(2, newContact.getLastName());
             ps.setString(3, newContact.getEmail());
-            ps.setString(4, newContact.getPhone());
             ps.setString(5, String.valueOf(newContact.getBirthday()));
             ps.setString(6, newContact.getAddress());
             ps.setString(7, String.valueOf(newContact.getPhoto()));
