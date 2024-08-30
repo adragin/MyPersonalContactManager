@@ -19,7 +19,7 @@ public class UtilsRegistration {
             randomFiveDigits.append(random.nextInt(10));
         }
 
-        return randomFiveDigits.toString() + "{" + login + "|" + password + "}";
+        return randomFiveDigits.toString() + "{" + login + "|" + UtilsUserPassword.hashPassword(password) + "}";
     }
 
     public boolean checkExistingUser(User user, UserDTORegister userDTORegister) {
@@ -56,6 +56,4 @@ public class UtilsRegistration {
         }
         return true;
     }
-
-
 }

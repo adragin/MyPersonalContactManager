@@ -1,5 +1,6 @@
 package com.example.MyPersonalContactManager.models.UserModels;
 
+import com.example.MyPersonalContactManager.utils.UtilsUserPassword;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,7 +35,7 @@ public class User {
         this.userId = UUID.randomUUID();
         this.role = role;
         this.login = login;
-        this.password = password;
+        this.password = UtilsUserPassword.hashPassword(password);
         this.userName = userName;
         this.createDate = LocalDateTime.now();
         this.lastUpdateDate = LocalDateTime.now();
