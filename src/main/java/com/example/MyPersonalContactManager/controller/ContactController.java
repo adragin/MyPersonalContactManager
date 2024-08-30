@@ -18,31 +18,34 @@ import java.util.List;
 @RequestMapping("/MyPersonalContactManager")
 public class ContactController {
 
-    private ResponseAPI responseAPI;
+    private final ResponseAPI responseAPI;
+    private final DatabaseContactService dbContactService;
+    private final DataBaseUserService dbUserService;
 
     @Autowired
-    private DatabaseContactService dbContactService;
-    @Autowired
-    private DataBaseUserService dbUserService;
+    public ContactController(ResponseAPI responseAPI, DatabaseContactService dbContactService, DataBaseUserService dbUserService) {
+        this.responseAPI = responseAPI;
+        this.dbContactService = dbContactService;
+        this.dbUserService = dbUserService;
+    }
 
     @PostMapping(value = "/createContact", consumes = "application/json")
     public ResponseEntity<ResponseAPI> crateContact(@Valid @RequestBody RequestBodyClient requestBodyClient,
-                                                    @RequestHeader("token") String token) {
+                                                    @RequestHeader(value = "token", required = false) String token) {
         if (token == null || token.isEmpty()) {
             responseAPI.response = new Error(400, "Authorization header is missing.");
             return ResponseEntity.badRequest().body(responseAPI);
         }
+
         String userId = dbUserService.getUserIdByToken(token);
         Contact contact = dbContactService.createContact(requestBodyClient.contact, userId);
-        responseAPI = new ResponseAPI();
         responseAPI.response = contact;
         return ResponseEntity.ok(responseAPI);
     }
 
     @GetMapping("/contacts/{contactId}")
-    public ResponseEntity<ResponseAPI> getContactById(@RequestHeader("token") String token,
+    public ResponseEntity<ResponseAPI> getContactById(@RequestHeader(value = "token", required = false) String token,
                                                       @PathVariable String contactId) {
-        responseAPI = new ResponseAPI();
         if (token == null || token.isEmpty()) {
             responseAPI.response = new Error(400, "Authorization header is missing.");
             return ResponseEntity.badRequest().body(responseAPI);
@@ -56,13 +59,12 @@ public class ContactController {
             responseAPI.response = new Error(403, "Access denied.");
         }
 
-
         return ResponseEntity.ok(responseAPI);
     }
 
     @GetMapping(value = "/contacts")
     public ResponseEntity<ResponseAPI> getAllContacts(@RequestHeader(value = "token", required = false) String token) {
-        responseAPI = new ResponseAPI();
+//        responseAPI = new ResponseAPI();
         if (token == null || token.isEmpty()) {
             responseAPI.response = new Error(400, "Authorization header is missing.");
             return ResponseEntity.badRequest().body(responseAPI);
@@ -85,8 +87,8 @@ public class ContactController {
     }
 
     @PutMapping(value = "/updateContact/{id}", consumes = "application/json")
-    public ResponseEntity<ResponseAPI> updateContact(@PathVariable String id,
-                                                     @RequestHeader("token") String token,
+    public ResponseEntity<ResponseAPI> updateContact(@PathVariable("id") String contactId,
+                                                     @RequestHeader(value = "token", required = false) String token,
                                                      @RequestBody RequestBodyClient requestBodyClient) {
         if (token == null || token.isEmpty()) {
             responseAPI.response = new Error(400, "Authorization header is missing.");
@@ -94,21 +96,25 @@ public class ContactController {
         }
 
         boolean userRole = dbUserService.getUserRoleByToken(token);
-        responseAPI = new ResponseAPI();
-        if (userRole) {
-            ContactDTOBig contactDTOBig = dbContactService.updateContact(id, requestBodyClient.contactDTOBig);
+        System.out.println("role = " + userRole);
+        String userId = dbUserService.getUserIdByToken(token);
+        System.out.println("userId = " + userId);
+        String ownerId = dbContactService.getOwnerId(contactId);
+        System.out.println("contactId = " + contactId);
+        System.out.println("ownerId = " + ownerId);
+        if (userId.equals(ownerId) || userRole) {
+            ContactDTOBig contactDTOBig = dbContactService.updateContact(contactId, requestBodyClient.contactDTOBig);
             responseAPI.response = contactDTOBig;
-            return ResponseEntity.ok(responseAPI);
         } else {
             responseAPI.response = new Error(403, "Access denied.");
-            return ResponseEntity.ok(responseAPI);
         }
+
+        return ResponseEntity.ok(responseAPI);
     }
 
     @DeleteMapping("contacts/delete")
     public ResponseEntity<ResponseAPI> deleteContactById(@RequestHeader("Contact-Id") String contactId,
-                                                         @RequestHeader("token") String token) {
-        responseAPI = new ResponseAPI();
+                                                         @RequestHeader(value = "token", required = false) String token) {
         if (token == null || token.isEmpty()) {
             responseAPI.response = new Error(400, "Authorization header is missing.");
             return ResponseEntity.badRequest().body(responseAPI);
@@ -118,6 +124,7 @@ public class ContactController {
         String userId = dbUserService.getUserIdByToken(token);
         Contact contact = dbContactService.getContactById(contactId);
         boolean isDeleted;
+
         if (userId.equals(contact.getOwnerId()) || userRole) {
             isDeleted = dbContactService.deleteContactById(contactId);
             responseAPI.response = isDeleted;

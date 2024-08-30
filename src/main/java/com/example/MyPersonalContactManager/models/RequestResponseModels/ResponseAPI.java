@@ -1,6 +1,9 @@
 package com.example.MyPersonalContactManager.models.RequestResponseModels;
 
-public class ResponseAPI{
+import org.springframework.stereotype.Component;
+
+@Component
+public class ResponseAPI {
     public Object response;
 
 //    public ResponseAPI(T response) {

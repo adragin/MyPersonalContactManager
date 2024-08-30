@@ -47,20 +47,22 @@ public class DatabaseContactService implements ContactServiceInterface<Contact, 
     @Override
     public Contact createContact(Contact contact, String userID) {
         Contact tempContact = dbRepository.createContact(contact, userID);
-        List<String> phoneList = dbRepository.createPhone(contact.getPhones(), tempContact.getId());
-        tempContact.setPhones(phoneList);
+//        List<String> phoneList = dbRepository.createPhone(contact.getPhones(), tempContact.getId());
+//        tempContact.setPhones(phoneList);
         return tempContact;
     }
 
     @Override
-    public ContactDTOBig updateContact(String id, ContactDTOBig newContact) {
-        dbRepository.updateContact(id, newContact);
-        return newContact;
+    public ContactDTOBig updateContact(String contactId, ContactDTOBig newContact) {
+        return dbRepository.updateContact(contactId, newContact);
     }
 
     @Override
-    public boolean deleteContactById(String id) {
-        dbRepository.deleteContactById(id);
-        return true;
+    public boolean deleteContactById(String contactId) {
+        return dbRepository.deleteContactById(contactId);
+    }
+
+    public String getOwnerId(String contactId) {
+        return dbRepository.getOwnerId(contactId);
     }
 }
