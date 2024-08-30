@@ -90,7 +90,6 @@ public class DataBaseUserService implements InterfaceUserService {
 
     @Override
     public String getUserIdByToken(String token) {
-
         return userRepository.getUserIdByToken(token);
     }
 
