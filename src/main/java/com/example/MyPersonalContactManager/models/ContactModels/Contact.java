@@ -25,7 +25,7 @@ public class Contact {
     private String lastName;
     private String email;
     @NotEmpty
-    private List<Phone> phones;
+    private List<String> phones;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate birthday;
     private String address;
@@ -41,7 +41,7 @@ public class Contact {
         this.lastUpdateDate = LocalDateTime.now();
     }
 
-    public Contact(String firstName, String lastName, String email, List<Phone> phones, LocalDate birthday,
+    public Contact(String firstName, String lastName, String email, List<String> phones, LocalDate birthday,
                    String address, URL photo) {
         this.id = String.valueOf(UUID.randomUUID());
         this.firstName = firstName;
@@ -73,7 +73,7 @@ public class Contact {
         } else this.birthday = birthday;
     }
 
-    public void setPhones(List<Phone> phones) {
+    public void setPhones(List<String> phones) {
         this.phones = new ArrayList<>(phones);
     }
 
@@ -90,8 +90,5 @@ public class Contact {
                 ", photo=" + photo +
                 ", createDate=" + createDate +
                 ", updateDate=" + lastUpdateDate;
-    }
-
-    public void setPhone(List<String> phoneList) {
     }
 }

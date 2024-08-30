@@ -139,47 +139,48 @@ VALUES ('52e61735-fcbf-481c-9134-edce167cb94e', 'New', 'TestContact', 'test@exam
         'https://i.imgur.com/yold5nS.png', 'c9e5d4f1-3e2a-472a-a09b-8c1b9bde1b98', '2024-08-22 21:36:33', '2024-08-22 21:36:33');
 
 -- select * from Contacts;
+-- drop table Contacts_Phones;
 
 CREATE TABLE Contacts_Phones
 (
-  id           integer AUTO_INCREMENT PRIMARY KEY, -- PK
-  Contact_Id   varchar(36),                        -- FK
-  Phone_Number varchar(28),
+  id               integer AUTO_INCREMENT PRIMARY KEY, -- PK
+  Contact_Id       varchar(36),                        -- FK
+  Phone_Number     varchar(28),
   Create_Date      TIMESTAMP,
   Last_Update_Date TIMESTAMP,
   FOREIGN KEY (Contact_Id) REFERENCES Contacts (id)
 );
 
-INSERT INTO Contacts_Phones (Contact_Id, Phone_Number)
-VALUES ('52e61735-fcbf-481c-9134-edce167cb94e', '(213) 555-0173'),
-       ('8c1a6e76-e831-43f4-b27b-f7e7c70a146f', '(310) 555-0937'),
-       ('a55b821e-6004-11ef-8672-fc5ceea01bf6', '(415) 555-0841'),
-       ('a55b821e-6004-11ef-8672-fc5ceea01bf6', '(646) 555-8888'),
-       ('a55b821e-6004-11ef-8672-fc5ceea01bf6', '(212) 555-8888'),
-       ('a55b9d7b-6004-11ef-8672-fc5ceea01bf6', '(646) 555-0238'),
-       ('a55ba262-6004-11ef-8672-fc5ceea01bf6', '(212) 555-0156'),
-       ('a55ba9a1-6004-11ef-8672-fc5ceea01bf6', '(718) 555-0465'),
-       ('a55bc5d5-6004-11ef-8672-fc5ceea01bf6', '(323) 555-0190'),
-       ('d65914eb-60bd-11ef-8672-fc5ceea01bf6', '(626) 555-0276'),
-       ('d65a8ea6-60bd-11ef-8672-fc5ceea01bf6', '(408) 555-0342'),
-       ('d65a9997-60bd-11ef-8672-fc5ceea01bf6', '(562) 555-0617'),
-       ('d65a9a83-60bd-11ef-8672-fc5ceea01bf6', '(914) 555-0749'),
-       ('d65a9aed-60bd-11ef-8672-fc5ceea01bf6', '(619) 555-0253'),
-       ('d65a9b71-60bd-11ef-8672-fc5ceea01bf6', '(646) 555-0365'),
-       ('d65a9be6-60bd-11ef-8672-fc5ceea01bf6', '(805) 555-0482'),
-       ('d65a9e81-60bd-11ef-8672-fc5ceea01bf6', '(347) 555-0319'),
-       ('d65aafd3-60bd-11ef-8672-fc5ceea01bf6', '(818) 555-0773'),
-       ('d65ab0ae-60bd-11ef-8672-fc5ceea01bf6', '(510) 555-0551'),
-       ('d65ab10a-60bd-11ef-8672-fc5ceea01bf6', '(303) 555-0644'),
-       ('d65ab178-60bd-11ef-8672-fc5ceea01bf6', '(702) 555-0815'),
-       ('d65ab1df-60bd-11ef-8672-fc5ceea01bf6', '(786) 555-0934'),
-       ('d65ab25c-60bd-11ef-8672-fc5ceea01bf6', '(404) 555-0169'),
-       ('d65ab2ea-60bd-11ef-8672-fc5ceea01bf6', '(215) 555-0297'),
-       ('d65abbfa-60bd-11ef-8672-fc5ceea01bf6', '(713) 555-0540'),
-       ('d65abcd0-60bd-11ef-8672-fc5ceea01bf6', '(216) 555-0726'),
-       ('d65abd55-60bd-11ef-8672-fc5ceea01bf6', '(505) 555-0623'),
-       ('d65abdbb-60bd-11ef-8672-fc5ceea01bf6', '(503) 555-0387'),
-       ('d65abe1f-60bd-11ef-8672-fc5ceea01bf6', '(813) 555-0839');
+INSERT INTO Contacts_Phones (Contact_Id, Phone_Number, Create_Date, Last_Update_Date)
+VALUES ('52e61735-fcbf-481c-9134-edce167cb94e', '(213) 555-0173', now(), now()),
+       ('8c1a6e76-e831-43f4-b27b-f7e7c70a146f', '(310) 555-0937', now(), now()),
+       ('a55b821e-6004-11ef-8672-fc5ceea01bf6', '(415) 555-0841', now(), now()),
+       ('a55b821e-6004-11ef-8672-fc5ceea01bf6', '(646) 555-8888', now(), now()),
+       ('a55b821e-6004-11ef-8672-fc5ceea01bf6', '(212) 555-8888', now(), now()),
+       ('a55b9d7b-6004-11ef-8672-fc5ceea01bf6', '(646) 555-0238', now(), now()),
+       ('a55ba262-6004-11ef-8672-fc5ceea01bf6', '(212) 555-0156', now(), now()),
+       ('a55ba9a1-6004-11ef-8672-fc5ceea01bf6', '(718) 555-0465', now(), now()),
+       ('a55bc5d5-6004-11ef-8672-fc5ceea01bf6', '(323) 555-0190', now(), now()),
+       ('d65914eb-60bd-11ef-8672-fc5ceea01bf6', '(626) 555-0276', now(), now()),
+       ('d65a8ea6-60bd-11ef-8672-fc5ceea01bf6', '(408) 555-0342', now(), now()),
+       ('d65a9997-60bd-11ef-8672-fc5ceea01bf6', '(562) 555-0617', now(), now()),
+       ('d65a9a83-60bd-11ef-8672-fc5ceea01bf6', '(914) 555-0749', now(), now()),
+       ('d65a9aed-60bd-11ef-8672-fc5ceea01bf6', '(619) 555-0253', now(), now()),
+       ('d65a9b71-60bd-11ef-8672-fc5ceea01bf6', '(646) 555-0365', now(), now()),
+       ('d65a9be6-60bd-11ef-8672-fc5ceea01bf6', '(805) 555-0482', now(), now()),
+       ('d65a9e81-60bd-11ef-8672-fc5ceea01bf6', '(347) 555-0319', now(), now()),
+       ('d65aafd3-60bd-11ef-8672-fc5ceea01bf6', '(818) 555-0773', now(), now()),
+       ('d65ab0ae-60bd-11ef-8672-fc5ceea01bf6', '(510) 555-0551', now(), now()),
+       ('d65ab10a-60bd-11ef-8672-fc5ceea01bf6', '(303) 555-0644', now(), now()),
+       ('d65ab178-60bd-11ef-8672-fc5ceea01bf6', '(702) 555-0815', now(), now()),
+       ('d65ab1df-60bd-11ef-8672-fc5ceea01bf6', '(786) 555-0934', now(), now()),
+       ('d65ab25c-60bd-11ef-8672-fc5ceea01bf6', '(404) 555-0169', now(), now()),
+       ('d65ab2ea-60bd-11ef-8672-fc5ceea01bf6', '(215) 555-0297', now(), now()),
+       ('d65abbfa-60bd-11ef-8672-fc5ceea01bf6', '(713) 555-0540', now(), now()),
+       ('d65abcd0-60bd-11ef-8672-fc5ceea01bf6', '(216) 555-0726', now(), now()),
+       ('d65abd55-60bd-11ef-8672-fc5ceea01bf6', '(505) 555-0623', now(), now()),
+       ('d65abdbb-60bd-11ef-8672-fc5ceea01bf6', '(503) 555-0387', now(), now()),
+       ('d65abe1f-60bd-11ef-8672-fc5ceea01bf6', '(813) 555-0839', now(), now());
 
 -- select * from Contacts_Phones;
 

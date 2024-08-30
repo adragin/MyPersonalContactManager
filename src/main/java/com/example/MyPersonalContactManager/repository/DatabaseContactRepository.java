@@ -85,17 +85,17 @@ public class DatabaseContactRepository implements ContactRepositoryInterface<Con
 
     }
 
-    public List<Phone> createPhone(List<Phone> phoneList, String contactId) {
+    public List<String> createPhone(List<String> phoneList, String contactId) {
         String sqlPhoneNumbers = "INSERT INTO Contacts_Phones (Contact_Id, Phone_Number, Create_Date, Last_Update_Date)" +
                 "VALUES (?, ?, ?, ?)";
 
 
-        for (Phone phone : phoneList) {
+        for (String phone : phoneList) {
             KeyHolder keyHolderForPhoneNumbers = new GeneratedKeyHolder();
             jdbcTemplate.update(connection -> {
                 PreparedStatement ps = connection.prepareStatement(sqlPhoneNumbers, Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, contactId);
-                ps.setString(2, phone.getPhoneNumber());
+                ps.setString(2, phone);
                 ps.setString(3, String.valueOf(phone.getCreateDate().toLocalDate()));
                 ps.setString(4, String.valueOf(phone.getLastUpdateDate().toLocalDate()));
                 return ps;
@@ -116,16 +116,15 @@ public class DatabaseContactRepository implements ContactRepositoryInterface<Con
         return jdbcTemplate.query(selectSql, contactRowMapper, userId);
     }
 
-    public List<Phone> getPhoneListByContactId(String contactId) {
-        String selectSql = "SELECT * FROM Contacts_Phones WHERE Contact_Id = ?";
-        return jdbcTemplate.query(selectSql, phoneRowMapper, contactId);
+    public List<String> getPhoneListByContactId(String contactId) {
+        String selectSql = "SELECT Phone_Number FROM Contacts_Phones WHERE Contact_Id = ?";
+        return jdbcTemplate.query(selectSql, (rs, rowNum) -> rs.getString("Phone_Number"), contactId);
     }
 
     @Override
     public List<Contact> getAllContacts() {
         String selectSql = "SELECT * FROM Contacts";
         List<Contact> contactList = jdbcTemplate.query(selectSql, contactRowMapper);
-
 
         return contactList.stream().toList();
     }

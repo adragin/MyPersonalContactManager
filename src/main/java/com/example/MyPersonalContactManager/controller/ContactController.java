@@ -61,7 +61,7 @@ public class ContactController {
     }
 
     @GetMapping(value = "/contacts")
-    public ResponseEntity<ResponseAPI> getAllContacts(@RequestHeader("token") String token) {
+    public ResponseEntity<ResponseAPI> getAllContacts(@RequestHeader(value = "token", required = false) String token) {
         responseAPI = new ResponseAPI();
         if (token == null || token.isEmpty()) {
             responseAPI.response = new Error(400, "Authorization header is missing.");
