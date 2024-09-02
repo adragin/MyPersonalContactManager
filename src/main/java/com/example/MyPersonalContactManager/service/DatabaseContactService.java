@@ -2,7 +2,6 @@ package com.example.MyPersonalContactManager.service;
 
 import com.example.MyPersonalContactManager.models.ContactModels.Contact;
 import com.example.MyPersonalContactManager.models.ContactModels.ContactDTOBig;
-import com.example.MyPersonalContactManager.models.ContactModels.Phone;
 import com.example.MyPersonalContactManager.repository.DatabaseContactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,7 +20,7 @@ public class DatabaseContactService implements ContactServiceInterface<Contact, 
     @Override
     public Contact getContactById(String contactId) {
         Contact tempContact = dbRepository.getContactByContactId(contactId);
-        List<Phone> phoneList = dbRepository.getPhoneListByContactId(contactId);
+        List<String> phoneList = dbRepository.getPhoneListByContactId(contactId);
         tempContact.setPhones(phoneList);
         return tempContact;
     }
@@ -29,7 +28,7 @@ public class DatabaseContactService implements ContactServiceInterface<Contact, 
     public List<Contact> getContactByUserId(String userId) {
         List<Contact> tempContact = dbRepository.getContactByUserId(userId);
         for (int i = 0; i < tempContact.size(); i++) {
-            List<Phone> phoneList = dbRepository.getPhoneListByContactId(tempContact.get(i).getId());
+            List<String> phoneList = dbRepository.getPhoneListByContactId(tempContact.get(i).getId());
             tempContact.get(i).setPhones(phoneList);
         }
         return tempContact;
@@ -38,9 +37,9 @@ public class DatabaseContactService implements ContactServiceInterface<Contact, 
     @Override
     public List<Contact> getAllContacts() {
         List<Contact> tempListAllContacts = dbRepository.getAllContacts();
-        for (int i = 0; i < tempListAllContacts.size(); i++) {
-            List<Phone> phoneList = dbRepository.getPhoneListByContactId(tempListAllContacts.get(i).getId());
-            tempListAllContacts.get(i).setPhones(phoneList);
+        for (Contact contact : tempListAllContacts) {
+            List<String> phoneList = dbRepository.getPhoneListByContactId(contact.getId());
+            contact.setPhones(phoneList);
         }
         return tempListAllContacts;
     }
@@ -48,20 +47,22 @@ public class DatabaseContactService implements ContactServiceInterface<Contact, 
     @Override
     public Contact createContact(Contact contact, String userID) {
         Contact tempContact = dbRepository.createContact(contact, userID);
-        List<Phone> phoneList = dbRepository.createPhone(contact.getPhones(), tempContact.getId());
-        tempContact.setPhones(phoneList);
+//        List<String> phoneList = dbRepository.createPhone(contact.getPhones(), tempContact.getId());
+//        tempContact.setPhones(phoneList);
         return tempContact;
     }
 
     @Override
-    public ContactDTOBig updateContact(String id, ContactDTOBig newContact) {
-        dbRepository.updateContact(id, newContact);
-        return newContact;
+    public ContactDTOBig updateContact(String contactId, ContactDTOBig newContact) {
+        return dbRepository.updateContact(contactId, newContact);
     }
 
     @Override
-    public boolean deleteContactById(String id) {
-        dbRepository.deleteContactById(id);
-        return true;
+    public boolean deleteContactById(String contactId) {
+        return dbRepository.deleteContactById(contactId);
+    }
+
+    public String getOwnerId(String contactId) {
+        return dbRepository.getOwnerId(contactId);
     }
 }

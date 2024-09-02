@@ -5,13 +5,12 @@ import com.example.MyPersonalContactManager.models.ContactModels.ContactDTOBig;
 import com.example.MyPersonalContactManager.models.ContactModels.Phone;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -63,7 +62,7 @@ public class DatabaseContactRepository implements ContactRepositoryInterface<Con
         String sqlContacts = "INSERT INTO Contacts (id, First_Name, Last_Name, Email, Birth_Day, " +
                 "Address, Photo, Owner_Id, Create_Date, Last_Update_Date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        KeyHolder keyHolderForContacts = new GeneratedKeyHolder();
+//        KeyHolder keyHolderForContacts = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sqlContacts, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, contact.getId());
@@ -78,32 +77,48 @@ public class DatabaseContactRepository implements ContactRepositoryInterface<Con
             ps.setString(10, String.valueOf(contact.getLastUpdateDate()));
 
             return ps;
-        }, keyHolderForContacts);
+        });
+
+        String phonesSql = "INSERT INTO Contacts_Phones (Contact_Id, Phone_Number, Create_Date, Last_Update_Date) VALUES (?, ?, ?, ?)";
+        for (String phone : contact.getPhones()) {
+            jdbcTemplate.update(connection -> {
+                PreparedStatement ps = connection.prepareStatement(phonesSql);
+                ps.setString(1, contact.getId());
+                ps.setString(2, phone);
+                ps.setString(3, String.valueOf((contact.getCreateDate())));
+                ps.setString(4, String.valueOf((contact.getCreateDate())));
+                return ps;
+            });
+        }
 
         String selectSql = "SELECT * FROM Contacts WHERE id = ?";
-        return jdbcTemplate.queryForObject(selectSql, contactRowMapper, contact.getId());
+        Contact createdContact = jdbcTemplate.queryForObject(selectSql, contactRowMapper, contact.getId());
 
+        String selectPhonesSql = "SELECT * FROM Contacts_Phones WHERE Contact_Id = ?";
+        List<String> phoneNumbers = jdbcTemplate.query(selectPhonesSql, (rs, rowNum) -> rs.getString("Phone_Number"), contact.getId());
+        createdContact.setPhones(phoneNumbers);
+        return createdContact;
     }
 
-    public List<Phone> createPhone(List<Phone> phoneList, String contactId) {
-        String sqlPhoneNumbers = "INSERT INTO Contacts_Phones (Contact_Id, Phone_Number, Create_Date, Last_Update_Date)" +
-                "VALUES (?, ?, ?, ?)";
-
-
-        for (Phone phone : phoneList) {
-            KeyHolder keyHolderForPhoneNumbers = new GeneratedKeyHolder();
-            jdbcTemplate.update(connection -> {
-                PreparedStatement ps = connection.prepareStatement(sqlPhoneNumbers, Statement.RETURN_GENERATED_KEYS);
-                ps.setString(1, contactId);
-                ps.setString(2, phone.getPhoneNumber());
-                ps.setString(3, String.valueOf(phone.getCreateDate().toLocalDate()));
-                ps.setString(4, String.valueOf(phone.getLastUpdateDate().toLocalDate()));
-                return ps;
-            }, keyHolderForPhoneNumbers);
-        }
-        String selectSql = "SELECT * FROM Contacts_Phones WHERE Contact_Id = ?";
-        return jdbcTemplate.query(selectSql, phoneRowMapper, contactId);
-    }
+//    public List<String> createPhone(List<String> phoneList, String contactId) {
+//        String sqlPhoneNumbers = "INSERT INTO Contacts_Phones (Contact_Id, Phone_Number, Create_Date, Last_Update_Date)" +
+//                "VALUES (?, ?, ?, ?)";
+//
+//
+//        for (String phone : phoneList) {
+//            KeyHolder keyHolderForPhoneNumbers = new GeneratedKeyHolder();
+//            jdbcTemplate.update(connection -> {
+//                PreparedStatement ps = connection.prepareStatement(sqlPhoneNumbers, Statement.RETURN_GENERATED_KEYS);
+//                ps.setString(1, contactId);
+//                ps.setString(2, phone);
+//                ps.setString(3, String.valueOf(phone.getCreateDate().toLocalDate()));
+//                ps.setString(4, String.valueOf(phone.getLastUpdateDate().toLocalDate()));
+//                return ps;
+//            }, keyHolderForPhoneNumbers);
+//        }
+//        String selectSql = "SELECT * FROM Contacts_Phones WHERE Contact_Id = ?";
+//        return jdbcTemplate.query(selectSql, phoneRowMapper, contactId);
+//    }
 
     @Override
     public Contact getContactByContactId(String contactId) {
@@ -116,9 +131,9 @@ public class DatabaseContactRepository implements ContactRepositoryInterface<Con
         return jdbcTemplate.query(selectSql, contactRowMapper, userId);
     }
 
-    public List<Phone> getPhoneListByContactId(String contactId) {
-        String selectSql = "SELECT * FROM Contacts_Phones WHERE Contact_Id = ?";
-        return jdbcTemplate.query(selectSql, phoneRowMapper, contactId);
+    public List<String> getPhoneListByContactId(String contactId) {
+        String selectSql = "SELECT Phone_Number FROM Contacts_Phones WHERE Contact_Id = ?";
+        return jdbcTemplate.query(selectSql, (rs, rowNum) -> rs.getString("Phone_Number"), contactId);
     }
 
     @Override
@@ -126,14 +141,21 @@ public class DatabaseContactRepository implements ContactRepositoryInterface<Con
         String selectSql = "SELECT * FROM Contacts";
         List<Contact> contactList = jdbcTemplate.query(selectSql, contactRowMapper);
 
-
         return contactList.stream().toList();
     }
 
+    public String getOwnerId(String contactId) {
+        String selectSql = "SELECT Owner_Id FROM Contacts WHERE id = ?";
+        return jdbcTemplate.queryForObject(selectSql, String.class, contactId);
+    }
+
     @Override
-    public ContactDTOBig updateContact(String id, ContactDTOBig newContact) {
+    public ContactDTOBig updateContact(String contactId, ContactDTOBig newContact) {
+        String deletePhoneNumbersSql = "DELETE FROM Contacts_Phones WHERE Contact_Id =?";
+        jdbcTemplate.update(deletePhoneNumbersSql, contactId);
+
         String sql = "UPDATE Contacts " +
-                "set First_Name = ? , Last_Name = ? , Email = ?, Phone = ?, Birth_Day = ?,Address = ?,  " +
+                "SET First_Name = ? , Last_Name = ? , Email = ?, Birth_Day = ?, Address = ?, " +
                 "Photo = ?, Last_Update_Date = ? where id = ?";
 
 //        KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -142,20 +164,41 @@ public class DatabaseContactRepository implements ContactRepositoryInterface<Con
             ps.setString(1, newContact.getFirstName());
             ps.setString(2, newContact.getLastName());
             ps.setString(3, newContact.getEmail());
-            ps.setString(5, String.valueOf(newContact.getBirthday()));
-            ps.setString(6, newContact.getAddress());
-            ps.setString(7, String.valueOf(newContact.getPhoto()));
-            ps.setString(8, String.valueOf(newContact.getLastUpdateDate()));
-            ps.setString(9, id);
+            ps.setString(4, String.valueOf(newContact.getBirthday()));
+            ps.setString(5, newContact.getAddress());
+            ps.setString(6, String.valueOf(newContact.getPhoto()));
+            ps.setString(7, String.valueOf(newContact.getLastUpdateDate()));
+            ps.setString(8, contactId);
             return ps;
         });
 
+        String phonesSql = "INSERT INTO Contacts_Phones (Contact_Id, Phone_Number, Create_Date, Last_Update_Date) VALUES (?, ?, ?, ?)";
+        for (String phone : newContact.getPhones()) {
+            jdbcTemplate.update(connection -> {
+                PreparedStatement ps = connection.prepareStatement(phonesSql);
+                ps.setString(1, contactId);
+                ps.setString(2, phone);
+                ps.setString(3, String.valueOf(LocalDateTime.now()));
+                ps.setString(4, String.valueOf(LocalDateTime.now()));
+                return ps;
+            });
+        }
+
         String selectSql = "SELECT * FROM Contacts WHERE id = ?";
-        return jdbcTemplate.queryForObject(selectSql, contactDTOBigRowMapper, id);
+        ContactDTOBig updatedContact = jdbcTemplate.queryForObject(selectSql, contactDTOBigRowMapper, contactId);
+
+        String selectPhonesSql = "SELECT * FROM Contacts_Phones WHERE Contact_Id = ?";
+        List<String> phoneNumbers = jdbcTemplate.query(selectPhonesSql, (rs, rowNum) -> rs.getString("Phone_Number"), contactId);
+        updatedContact.setPhones(phoneNumbers);
+
+        return updatedContact;
     }
 
     @Override
-    public boolean deleteContactById(String id) {
-        return jdbcTemplate.update("DELETE FROM Contacts WHERE id = ?", id) > 0;
+    public boolean deleteContactById(String contactId) {
+        String deletePhoneNumbersSql = "DELETE FROM Contacts_Phones WHERE Contact_Id =?";
+        jdbcTemplate.update(deletePhoneNumbersSql, contactId);
+
+        return jdbcTemplate.update("DELETE FROM Contacts WHERE id = ?", contactId) > 0;
     }
 }
