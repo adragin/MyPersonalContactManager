@@ -6,20 +6,21 @@ import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Component
 public class UtilsRegistration {
     public String generateToken(String login, String password) {
 
         Random random = new Random();
-        StringBuilder randomFiveDigits = new StringBuilder();
 
         //генерация первых 5 случайных цифр
-        for (int i = 0; i < 5; i++) {
-            randomFiveDigits.append(random.nextInt(10));
-        }
+        String randomFiveDigits = IntStream.range(0, 5)
+                .mapToObj(i -> String.valueOf(random.nextInt(10)))
+                .collect(Collectors.joining());
 
-        return randomFiveDigits.toString() + "{" + login + "|" + UtilsUserPassword.hashPassword(password) + "}";
+        return randomFiveDigits + "{" + login + "|" + UtilsUserPassword.hashPassword(password) + "}";
     }
 
     public boolean checkExistingUser(User user, UserDTORegister userDTORegister) {
@@ -36,22 +37,21 @@ public class UtilsRegistration {
         }
         boolean hasSpecialChar = false;
         boolean hasDigit = false;
+        boolean hasUpper = false;
         String specialChars = "!@#$%^&*()-+=<>?";
 
-        for (int i = 0; i < password.length(); i++) {
-            char currentChar = password.charAt(i);
-            if (specialChars.contains(String.valueOf(currentChar))) {
-                hasSpecialChar = true;
-            } else if (Character.isDigit(currentChar)) {
-                hasDigit = true;
-            }
-            // Если цифра и спецсимвол есть, то break;
-            if (hasDigit && hasSpecialChar) {
-                break;
-            }
-        }
+        hasSpecialChar = password.chars()
+                .mapToObj(c -> (char) c)
+                .anyMatch(c -> specialChars.contains(String.valueOf(c)));
+
+        hasDigit = password.chars()
+                .anyMatch(Character::isDigit);
+
+        hasUpper = password.chars()
+                .anyMatch(Character::isUpperCase);
+
         // Если нет цифры и спец символа:
-        if (!hasDigit || !hasSpecialChar) {
+        if (!hasDigit && !hasSpecialChar && !hasUpper) {
             return false;
         }
         return true;
