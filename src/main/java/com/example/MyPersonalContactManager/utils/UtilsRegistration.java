@@ -24,20 +24,16 @@ public class UtilsRegistration {
     }
 
     public boolean checkExistingUser(User user, UserDTORegister userDTORegister) {
-        if (Objects.nonNull(user) && user.getLogin().
-                equalsIgnoreCase(userDTORegister.getLogin())) {
-            return true;
-        }
-        return false;
+        return Objects.nonNull(user) && user.getLogin().equalsIgnoreCase(userDTORegister.getLogin());
     }
 
     public boolean checkCorrectPassword(String password) {
         if (password.length() < 8) {
             return false;
         }
-        boolean hasSpecialChar = false;
-        boolean hasDigit = false;
-        boolean hasUpper = false;
+        boolean hasSpecialChar;
+        boolean hasDigit;
+        boolean hasUpper;
         String specialChars = "!@#$%^&*()-+=<>?";
 
         hasSpecialChar = password.chars()
@@ -50,10 +46,7 @@ public class UtilsRegistration {
         hasUpper = password.chars()
                 .anyMatch(Character::isUpperCase);
 
-        // Если нет цифры и спец символа:
-        if (!hasDigit && !hasSpecialChar && !hasUpper) {
-            return false;
-        }
-        return true;
+        // Если нет цифры и спец символа и большой буквы -> false:
+        return hasDigit && hasSpecialChar && hasUpper;
     }
 }
