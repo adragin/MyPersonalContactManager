@@ -21,7 +21,6 @@ public class UserController {
 
     public final InterfaceUserService dbUserService;
 
-
     @PostMapping(value = "/userRegistration", consumes = "application/json")
     public ResponseEntity<UserDTOResponse> userRegistration(@Valid @RequestBody UserDTORegister user) {
         UserDTOResponse userResponse = dbUserService.registerUser(user);
@@ -33,7 +32,6 @@ public class UserController {
         UserDTOResponse userResponse = dbUserService.loginUser(userDto);
         return ResponseEntity.ok(userResponse);
     }
-
 
     //обработка исключений
     @ExceptionHandler({EasyUserPasswordException.class, InvalidLoginPasswordException.class, UserAlreadyExistsException.class})
@@ -51,5 +49,4 @@ public class UserController {
                 .build();
         return ResponseEntity.ok(response);
     }
-
 }

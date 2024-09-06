@@ -1,25 +1,24 @@
 package com.example.MyPersonalContactManager.models.UserModels;
 
-import com.example.MyPersonalContactManager.utils.UtilsRegistration;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Setter
 @Getter
-public class UserToken extends User {
-    private final String token;
+@NoArgsConstructor
+@Entity
+@Table(name = "users_token")
+public class UserToken {
+    private String token;
+    @Id
     private String userId;
     private LocalDateTime createDate;
     private LocalDateTime lastUpdateDate;
-    private UtilsRegistration authUser = new UtilsRegistration();
-
-    public UserToken() {
-        this.token = authUser.generateToken(getLogin(), getPassword());
-        this.userId = getUserId();
-        this.createDate = LocalDateTime.now();
-        this.lastUpdateDate = LocalDateTime.now();
-    }
 }
 

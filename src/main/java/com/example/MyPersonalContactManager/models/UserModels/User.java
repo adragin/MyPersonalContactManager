@@ -1,6 +1,9 @@
 package com.example.MyPersonalContactManager.models.UserModels;
 
 import com.example.MyPersonalContactManager.utils.UtilsUserPassword;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +14,10 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@Entity
+@Table(name = "users")
 public class User {
+    @Id
     private String userId;
     @NotBlank
     private Boolean role; // true->admin, false->user

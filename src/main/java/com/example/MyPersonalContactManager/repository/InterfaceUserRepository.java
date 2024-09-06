@@ -1,27 +1,31 @@
 package com.example.MyPersonalContactManager.repository;
 
+import com.example.MyPersonalContactManager.models.UserModels.User;
+
 import java.util.List;
 
-public interface InterfaceUserRepository<T> {
+public interface InterfaceUserRepository {
 
-    T createUser(T user);
+    User createUser(User user);
 
-    T getUserById(String userId);
+    User getUserById(String userId);
 
-    T getUserByLogin(String login);
+    User getUserByLogin(String login);
 
-    List<T> getAllUsers();
-
-    boolean deleteUserById(String userId);
-
-    T updateUser(T user);
-
-    String getToken(String userId);
-
-    void saveToken(String token, String userId);
+    List<User> getAllUsers();
 
     String getUserIdByToken(String token);
 
     boolean getUserRoleByToken(String token);
+
+    User updateUser(User user);
+
+    User setUserRoleById(String userId, boolean role);
+
+    boolean deleteUserById(String userId);
+
+    String getToken(String userId);
+
+    void saveToken(String token, String userId);
 }
 

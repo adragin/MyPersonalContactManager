@@ -10,18 +10,24 @@ import com.example.MyPersonalContactManager.models.UserModels.UserDTOResponse;
 import com.example.MyPersonalContactManager.repository.InterfaceUserRepository;
 import com.example.MyPersonalContactManager.utils.UtilsRegistration;
 import com.example.MyPersonalContactManager.utils.UtilsUserAuthorization;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
 public class DataBaseUserService implements InterfaceUserService {
 
-    private final InterfaceUserRepository<User> userRepository;
-    private UtilsRegistration utilsRegistration;
-    private UtilsUserAuthorization utilsUserAuth;
+    private final InterfaceUserRepository userRepository;
+    private final UtilsRegistration utilsRegistration;
+    private final UtilsUserAuthorization utilsUserAuth;
+
+    @Autowired
+    public DataBaseUserService(InterfaceUserRepository userRepository, UtilsRegistration utilsRegistration, UtilsUserAuthorization utilsUserAuth) {
+        this.userRepository = userRepository;
+        this.utilsRegistration = utilsRegistration;
+        this.utilsUserAuth = utilsUserAuth;
+    }
 
     @Override
     public UserDTOResponse registerUser(UserDTORegister userDTORegister) {
@@ -33,6 +39,7 @@ public class DataBaseUserService implements InterfaceUserService {
         if (!utilsRegistration.checkCorrectPassword(userDTORegister.getPassword())) {
             throw new EasyUserPasswordException("You password is too easy");
         }
+
         User newUser = new User();
         newUser.setLogin(userDTORegister.getLogin());
         newUser.setPassword(userDTORegister.getPassword());
@@ -41,7 +48,7 @@ public class DataBaseUserService implements InterfaceUserService {
 
         userRepository.createUser(newUser);
 
-        String token = utilsRegistration.generateToken(newUser.getLogin(), newUser.getPassword());
+        String token = generateToken(newUser.getLogin(), newUser.getPassword());
         userRepository.saveToken(token, String.valueOf(newUser.getUserId()));
         return UserDTOResponse.builder()
                 .login(newUser.getLogin())

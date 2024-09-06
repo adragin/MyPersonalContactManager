@@ -1,6 +1,7 @@
 package com.example.MyPersonalContactManager.controller;
 
 import com.example.MyPersonalContactManager.models.ContactModels.Contact;
+import com.example.MyPersonalContactManager.models.ContactModels.ContactDTO;
 import com.example.MyPersonalContactManager.models.ContactModels.ContactDTOBig;
 import com.example.MyPersonalContactManager.models.Error;
 import com.example.MyPersonalContactManager.models.RequestResponseModels.RequestBodyClient;
@@ -9,6 +10,7 @@ import com.example.MyPersonalContactManager.service.DataBaseUserService;
 import com.example.MyPersonalContactManager.service.DatabaseContactService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,30 +46,28 @@ public class ContactController {
     }
 
     @GetMapping("/contacts/{contactId}")
-    public ResponseEntity<ResponseAPI> getContactById(@RequestHeader(value = "token", required = false) String token,
-                                                      @PathVariable String contactId) {
+    public ResponseEntity<ResponseAPI> getContactByContactId(@RequestHeader(value = "token", required = false) String token,
+                                                             @PathVariable String contactId) {
         if (token == null || token.isEmpty()) {
             responseAPI.response = new Error(400, "Authorization header is missing.");
             return ResponseEntity.badRequest().body(responseAPI);
         }
         boolean userRole = dbUserService.getUserRoleByToken(token);
         String userId = dbUserService.getUserIdByToken(token);
-        Contact contact = dbContactService.getContactById(contactId);
-        if (userId.equals(contact.getOwnerId()) || userRole) {
-            responseAPI.response = contact;
+        ContactDTO contactDTO = dbContactService.getContactByContactId(contactId);
+        if (userId.equals(contactDTO.getOwnerId()) || userRole) {
+            responseAPI.response = contactDTO;
         } else {
             responseAPI.response = new Error(403, "Access denied.");
         }
-
-        return ResponseEntity.ok(responseAPI);
+        return ResponseEntity.status(HttpStatus.OK).body(responseAPI);
     }
 
     @GetMapping(value = "/contacts")
     public ResponseEntity<ResponseAPI> getAllContacts(@RequestHeader(value = "token", required = false) String token) {
-//        responseAPI = new ResponseAPI();
         if (token == null || token.isEmpty()) {
             responseAPI.response = new Error(400, "Authorization header is missing.");
-            return ResponseEntity.badRequest().body(responseAPI);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseAPI);
         }
 
         boolean userRole = dbUserService.getUserRoleByToken(token);
@@ -76,10 +76,10 @@ public class ContactController {
         if (userId.isEmpty()) {
             responseAPI.response = new Error(403, "Access denied.");
         } else if (userRole) {
-            List<Contact> allContacts = dbContactService.getAllContacts();
+            List<ContactDTO> allContacts = dbContactService.getAllContacts();
             responseAPI.response = allContacts;
         } else {
-            List<Contact> contactListByUserId = dbContactService.getContactByUserId(userId);
+            List<ContactDTO> contactListByUserId = dbContactService.getContactsByUserId(userId);
             responseAPI.response = contactListByUserId;
         }
 
@@ -122,10 +122,10 @@ public class ContactController {
 
         boolean userRole = dbUserService.getUserRoleByToken(token);
         String userId = dbUserService.getUserIdByToken(token);
-        Contact contact = dbContactService.getContactById(contactId);
+        ContactDTO contactDTO = dbContactService.getContactByContactId(contactId);
         boolean isDeleted;
 
-        if (userId.equals(contact.getOwnerId()) || userRole) {
+        if (userId.equals(contactDTO.getOwnerId()) || userRole) {
             isDeleted = dbContactService.deleteContactById(contactId);
             responseAPI.response = isDeleted;
         } else {

@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public class DatabaseContactRepository implements ContactRepositoryInterface<Contact, ContactDTOBig> {
+public class DatabaseContactRepository implements ContactRepositoryInterface {
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -25,44 +25,41 @@ public class DatabaseContactRepository implements ContactRepositoryInterface<Con
     private final RowMapper<Contact> contactRowMapper = (ResultSet rs, int rowNum) -> {
         Contact contact = new Contact();
         contact.setId(rs.getString("id"));
-        contact.setFirstName(rs.getString("First_Name"));
-        contact.setLastName(rs.getString("Last_Name"));
-        contact.setEmail(rs.getString("Email"));
-        contact.setBirthday(rs.getDate("Birth_Day").toLocalDate());
-        contact.setAddress(rs.getString("Address"));
-        contact.setPhoto(rs.getURL("Photo"));
-        contact.setOwnerId(rs.getString("Owner_Id"));
-        contact.setCreateDate(rs.getTimestamp("Create_Date").toLocalDateTime());
-        contact.setLastUpdateDate(rs.getTimestamp("Last_Update_Date").toLocalDateTime());
+        contact.setFirstName(rs.getString("first_name"));
+        contact.setLastName(rs.getString("last_name"));
+        contact.setEmail(rs.getString("email"));
+        contact.setBirthday(rs.getDate("birth_day").toLocalDate());
+        contact.setAddress(rs.getString("address"));
+        contact.setPhoto(rs.getURL("photo"));
+        contact.setOwnerId(rs.getString("owner_id"));
+        contact.setCreateDate(rs.getTimestamp("create_date").toLocalDateTime());
+        contact.setLastUpdateDate(rs.getTimestamp("last_update_date").toLocalDateTime());
         return contact;
     };
     private final RowMapper<ContactDTOBig> contactDTOBigRowMapper = (ResultSet rs, int rowNum) -> {
         ContactDTOBig contactDTO = new ContactDTOBig();
-        contactDTO.setFirstName(rs.getString("First_Name"));
-        contactDTO.setLastName(rs.getString("Last_Name"));
-        contactDTO.setEmail(rs.getString("Email"));
-        contactDTO.setBirthday(rs.getDate("Birth_Day").toLocalDate());
-        contactDTO.setAddress(rs.getString("Address"));
-        contactDTO.setPhoto(rs.getURL("Photo"));
-        contactDTO.setLastUpdateDate(rs.getTimestamp("Last_Update_Date").toLocalDateTime());
+        contactDTO.setFirstName(rs.getString("first_name"));
+        contactDTO.setLastName(rs.getString("last_name"));
+        contactDTO.setEmail(rs.getString("email"));
+        contactDTO.setBirthday(rs.getDate("birth_day").toLocalDate());
+        contactDTO.setAddress(rs.getString("address"));
+        contactDTO.setPhoto(rs.getURL("photo"));
+        contactDTO.setLastUpdateDate(rs.getTimestamp("last_update_date").toLocalDateTime());
         return contactDTO;
     };
 
     private final RowMapper<Phone> phoneRowMapper = (rs, rowNum) -> {
         Phone phone = new Phone();
-        phone.setId(rs.getString("id"));
-        phone.setPhoneNumber(rs.getString("Phone_Number"));
-        phone.setCreateDate(rs.getTimestamp("Create_Date").toLocalDateTime());
-        phone.setLastUpdateDate(rs.getTimestamp("Last_Update_Date").toLocalDateTime());
+        phone.setContactId(rs.getString("contact_id"));
+        phone.setPhoneNumber(rs.getString("phone_number"));
         return phone;
     };
 
     @Override
     public Contact createContact(Contact contact, String userID) {
-        String sqlContacts = "INSERT INTO Contacts (id, First_Name, Last_Name, Email, Birth_Day, " +
-                "Address, Photo, Owner_Id, Create_Date, Last_Update_Date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sqlContacts = "INSERT INTO contacts (id, first_name, last_name, email, birth_day, " +
+                "address, photo, owner_id, create_date, last_update_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-//        KeyHolder keyHolderForContacts = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sqlContacts, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, contact.getId());
@@ -79,25 +76,16 @@ public class DatabaseContactRepository implements ContactRepositoryInterface<Con
             return ps;
         });
 
-        String phonesSql = "INSERT INTO Contacts_Phones (Contact_Id, Phone_Number, Create_Date, Last_Update_Date) VALUES (?, ?, ?, ?)";
-        for (String phone : contact.getPhones()) {
+        String phonesSql = "INSERT INTO contacts_phones (contact_id, phone_number) VALUES (?, ?)";
+        for (Phone phone : contact.getPhones()) {
             jdbcTemplate.update(connection -> {
                 PreparedStatement ps = connection.prepareStatement(phonesSql);
                 ps.setString(1, contact.getId());
-                ps.setString(2, phone);
-                ps.setString(3, String.valueOf((contact.getCreateDate())));
-                ps.setString(4, String.valueOf((contact.getCreateDate())));
+                ps.setString(2, phone.getPhoneNumber());
                 return ps;
             });
         }
-
-        String selectSql = "SELECT * FROM Contacts WHERE id = ?";
-        Contact createdContact = jdbcTemplate.queryForObject(selectSql, contactRowMapper, contact.getId());
-
-        String selectPhonesSql = "SELECT * FROM Contacts_Phones WHERE Contact_Id = ?";
-        List<String> phoneNumbers = jdbcTemplate.query(selectPhonesSql, (rs, rowNum) -> rs.getString("Phone_Number"), contact.getId());
-        createdContact.setPhones(phoneNumbers);
-        return createdContact;
+        return contact;
     }
 
 //    public List<String> createPhone(List<String> phoneList, String contactId) {

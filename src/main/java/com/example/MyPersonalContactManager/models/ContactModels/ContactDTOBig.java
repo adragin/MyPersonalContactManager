@@ -60,18 +60,4 @@ public class ContactDTOBig {
             this.birthday = DEFAULT_BIRTHDAY;
         } else this.birthday = birthday;
     }
-
-    @Override
-    public String toString() {
-        return "ContactDTOBig{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phones + '\'' +
-                ", birthday=" + birthday +
-                ", address='" + address + '\'' +
-                ", photo=" + photo +
-                ", lastUpdateDate=" + lastUpdateDate +
-                '}';
-    }
 }
