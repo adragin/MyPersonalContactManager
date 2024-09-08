@@ -8,25 +8,25 @@ CREATE DATABASE MyPersonalContactManager_DB;
 
 USE MyPersonalContactManager_DB;
 
--- drop table Contacts_Phones;
--- drop table Contacts;
--- drop table Users_Token;
--- drop table Users;
+#  drop table сontacts_phones;
+#  drop table сontacts;
+# drop table users_token;
+# drop table users;
 
 -- Создание таблицы Users
-CREATE TABLE Users
+CREATE TABLE users
 (
-  User_Id          varchar(36) primary key, -- добавлен PK
-  User_Role        boolean check (User_Role in (0, 1)) not null,
-  Login            varchar(128)                        not null unique,
-  Password         varchar(50)                         not null,
-  User_Name        varchar(36)                         not null,
-  Create_Date      TIMESTAMP,
-  Last_Update_Date TIMESTAMP
+  user_id          varchar(36) primary key, -- добавлен PK
+  user_role        boolean check (user_role in (0, 1)) not null,
+  login            varchar(128)                        not null unique,
+  password         varchar(50)                         not null,
+  user_name        varchar(36)                         not null,
+  create_date      TIMESTAMP,
+  last_update_date TIMESTAMP
 );
 
 -- Тестовые Users
-INSERT INTO Users (User_Id, User_Name, Login, Password, User_Role, Create_Date, Last_Update_Date)
+INSERT INTO users (user_id, user_name, login, password, user_role, create_date, last_update_date)
 VALUES ('4b3b85f1-1a3e-4c29-9b59-74c891b4b35d', 'Alex Doe', 'alexdoe@example.com', 'password123', TRUE, NOW(), NOW()),
        ('d2b2b67e-5b2f-40a8-8b5e-c92a5b70e4d1', 'Nata Smith', 'natasmith@example.com', 'mypassword', TRUE, NOW(), NOW()),
        ('f6c738a7-8d7d-4f1e-bb9c-d76d30b78c9d', 'Alice Johnson', 'alicejohnson@example.com', 'alicepass', FALSE, NOW(), NOW()),
@@ -35,38 +35,38 @@ VALUES ('4b3b85f1-1a3e-4c29-9b59-74c891b4b35d', 'Alex Doe', 'alexdoe@example.com
 -- select * from Users;
 
 -- Создание таблицы Users_Token
-CREATE TABLE Users_Token
+CREATE TABLE users_token
 (
-  Token            varchar(256) unique,
-  User_Id          varchar(36), -- FK -> Users (User_Id)
-  Create_Date      TIMESTAMP,
-  Last_Update_Date TIMESTAMP,
-  FOREIGN KEY (User_Id) REFERENCES Users (User_Id)
+  token            varchar(256) unique,
+  user_id          varchar(36), -- FK -> Users (User_Id)
+  create_date      TIMESTAMP,
+  last_update_date TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES Users (user_id)
 );
 
 -- Тестовая запись Users_Token
-INSERT INTO Users_Token (Token, User_Id, Create_Date, Last_Update_Date)
+INSERT INTO Users_Token (token, user_id, create_date, last_update_date)
 VALUES ('001{alexdoe@example.com|password123}', '4b3b85f1-1a3e-4c29-9b59-74c891b4b35d', now(), now());
 
 -- Таблица Contacts
-CREATE TABLE Contacts
+CREATE TABLE contacts
 (
   id               varchar(36) PRIMARY KEY, -- добавлена опция PK
-  First_Name       VARCHAR(128) NOT NULL,
-  Last_Name        VARCHAR(128),
-  Email            varchar(50),
+  first_name       VARCHAR(128) NOT NULL,
+  last_name        VARCHAR(128),
+  email            varchar(50),
   -- Phone_Id      varchar(15),          -- удален , теперь они в таблице Users_Phones
-  Birth_Day        DATE,
-  Address          VARCHAR(128),
-  Photo            varchar(100),
-  Owner_Id         varchar(36),             -- новое поле, FK
-  Create_Date      TIMESTAMP,
-  Last_Update_Date TIMESTAMP,
-  FOREIGN KEY (Owner_Id) REFERENCES Users (User_Id)
+  birth_day        DATE,
+  address          VARCHAR(128),
+  photo            varchar(100),
+  owner_id         varchar(36),             -- новое поле, FK
+  create_date      TIMESTAMP,
+  last_update_date TIMESTAMP,
+  FOREIGN KEY (owner_id) REFERENCES Users (user_id)
 );
 
 -- Тестовые контакты (учтены ранее создаваемые user'ы в качестве Owner_Id)
-INSERT INTO Contacts (id, First_Name, Last_Name, Email, Birth_Day, Address, Photo, Owner_Id, Create_Date, Last_Update_Date)
+INSERT INTO contacts (id, first_name, last_name, email, birth_day, address, photo, owner_id, create_date, last_update_date)
 VALUES ('52e61735-fcbf-481c-9134-edce167cb94e', 'New', 'TestContact', 'test@example.com', '1980-01-01', 'New York, USA',
         'https://i.imgur.com/yold5nS.png', '4b3b85f1-1a3e-4c29-9b59-74c891b4b35d', '2024-08-26 23:16:53', '2024-08-26 23:16:53'),
        ('8c1a6e76-e831-43f4-b27b-f7e7c70a146f', 'New', 'TestContact', 'test@example.com', '1980-01-01', 'New York, USA',
@@ -141,46 +141,43 @@ VALUES ('52e61735-fcbf-481c-9134-edce167cb94e', 'New', 'TestContact', 'test@exam
 -- select * from Contacts;
 -- drop table Contacts_Phones;
 
-CREATE TABLE Contacts_Phones
+CREATE TABLE contacts_phones
 (
-  id               integer AUTO_INCREMENT PRIMARY KEY, -- PK
-  Contact_Id       varchar(36),                        -- FK
-  Phone_Number     varchar(28),
-  Create_Date      TIMESTAMP,
-  Last_Update_Date TIMESTAMP,
-  FOREIGN KEY (Contact_Id) REFERENCES Contacts (id)
+  contact_id   varchar(36),             -- FK
+  phone_number varchar(28) PRIMARY KEY, -- PK
+  FOREIGN KEY (contact_id) REFERENCES contacts (id)
 );
 
-INSERT INTO Contacts_Phones (Contact_Id, Phone_Number, Create_Date, Last_Update_Date)
-VALUES ('52e61735-fcbf-481c-9134-edce167cb94e', '(213) 555-0173', now(), now()),
-       ('8c1a6e76-e831-43f4-b27b-f7e7c70a146f', '(310) 555-0937', now(), now()),
-       ('a55b821e-6004-11ef-8672-fc5ceea01bf6', '(415) 555-0841', now(), now()),
-       ('a55b821e-6004-11ef-8672-fc5ceea01bf6', '(646) 555-8888', now(), now()),
-       ('a55b821e-6004-11ef-8672-fc5ceea01bf6', '(212) 555-8888', now(), now()),
-       ('a55b9d7b-6004-11ef-8672-fc5ceea01bf6', '(646) 555-0238', now(), now()),
-       ('a55ba262-6004-11ef-8672-fc5ceea01bf6', '(212) 555-0156', now(), now()),
-       ('a55ba9a1-6004-11ef-8672-fc5ceea01bf6', '(718) 555-0465', now(), now()),
-       ('a55bc5d5-6004-11ef-8672-fc5ceea01bf6', '(323) 555-0190', now(), now()),
-       ('d65914eb-60bd-11ef-8672-fc5ceea01bf6', '(626) 555-0276', now(), now()),
-       ('d65a8ea6-60bd-11ef-8672-fc5ceea01bf6', '(408) 555-0342', now(), now()),
-       ('d65a9997-60bd-11ef-8672-fc5ceea01bf6', '(562) 555-0617', now(), now()),
-       ('d65a9a83-60bd-11ef-8672-fc5ceea01bf6', '(914) 555-0749', now(), now()),
-       ('d65a9aed-60bd-11ef-8672-fc5ceea01bf6', '(619) 555-0253', now(), now()),
-       ('d65a9b71-60bd-11ef-8672-fc5ceea01bf6', '(646) 555-0365', now(), now()),
-       ('d65a9be6-60bd-11ef-8672-fc5ceea01bf6', '(805) 555-0482', now(), now()),
-       ('d65a9e81-60bd-11ef-8672-fc5ceea01bf6', '(347) 555-0319', now(), now()),
-       ('d65aafd3-60bd-11ef-8672-fc5ceea01bf6', '(818) 555-0773', now(), now()),
-       ('d65ab0ae-60bd-11ef-8672-fc5ceea01bf6', '(510) 555-0551', now(), now()),
-       ('d65ab10a-60bd-11ef-8672-fc5ceea01bf6', '(303) 555-0644', now(), now()),
-       ('d65ab178-60bd-11ef-8672-fc5ceea01bf6', '(702) 555-0815', now(), now()),
-       ('d65ab1df-60bd-11ef-8672-fc5ceea01bf6', '(786) 555-0934', now(), now()),
-       ('d65ab25c-60bd-11ef-8672-fc5ceea01bf6', '(404) 555-0169', now(), now()),
-       ('d65ab2ea-60bd-11ef-8672-fc5ceea01bf6', '(215) 555-0297', now(), now()),
-       ('d65abbfa-60bd-11ef-8672-fc5ceea01bf6', '(713) 555-0540', now(), now()),
-       ('d65abcd0-60bd-11ef-8672-fc5ceea01bf6', '(216) 555-0726', now(), now()),
-       ('d65abd55-60bd-11ef-8672-fc5ceea01bf6', '(505) 555-0623', now(), now()),
-       ('d65abdbb-60bd-11ef-8672-fc5ceea01bf6', '(503) 555-0387', now(), now()),
-       ('d65abe1f-60bd-11ef-8672-fc5ceea01bf6', '(813) 555-0839', now(), now());
+INSERT INTO Contacts_Phones (contact_id, phone_number)
+VALUES ('52e61735-fcbf-481c-9134-edce167cb94e', '(213) 555-0173'),
+       ('8c1a6e76-e831-43f4-b27b-f7e7c70a146f', '(310) 555-0937'),
+       ('a55b821e-6004-11ef-8672-fc5ceea01bf6', '(415) 555-0841'),
+       ('a55b821e-6004-11ef-8672-fc5ceea01bf6', '(646) 555-8888'),
+       ('a55b821e-6004-11ef-8672-fc5ceea01bf6', '(212) 555-8888'),
+       ('a55b9d7b-6004-11ef-8672-fc5ceea01bf6', '(646) 555-0238'),
+       ('a55ba262-6004-11ef-8672-fc5ceea01bf6', '(212) 555-0156'),
+       ('a55ba9a1-6004-11ef-8672-fc5ceea01bf6', '(718) 555-0465'),
+       ('a55bc5d5-6004-11ef-8672-fc5ceea01bf6', '(323) 555-0190'),
+       ('d65914eb-60bd-11ef-8672-fc5ceea01bf6', '(626) 555-0276'),
+       ('d65a8ea6-60bd-11ef-8672-fc5ceea01bf6', '(408) 555-0342'),
+       ('d65a9997-60bd-11ef-8672-fc5ceea01bf6', '(562) 555-0617'),
+       ('d65a9a83-60bd-11ef-8672-fc5ceea01bf6', '(914) 555-0749'),
+       ('d65a9aed-60bd-11ef-8672-fc5ceea01bf6', '(619) 555-0253'),
+       ('d65a9b71-60bd-11ef-8672-fc5ceea01bf6', '(646) 555-0365'),
+       ('d65a9be6-60bd-11ef-8672-fc5ceea01bf6', '(805) 555-0482'),
+       ('d65a9e81-60bd-11ef-8672-fc5ceea01bf6', '(347) 555-0319'),
+       ('d65aafd3-60bd-11ef-8672-fc5ceea01bf6', '(818) 555-0773'),
+       ('d65ab0ae-60bd-11ef-8672-fc5ceea01bf6', '(510) 555-0551'),
+       ('d65ab10a-60bd-11ef-8672-fc5ceea01bf6', '(303) 555-0644'),
+       ('d65ab178-60bd-11ef-8672-fc5ceea01bf6', '(702) 555-0815'),
+       ('d65ab1df-60bd-11ef-8672-fc5ceea01bf6', '(786) 555-0934'),
+       ('d65ab25c-60bd-11ef-8672-fc5ceea01bf6', '(404) 555-0169'),
+       ('d65ab2ea-60bd-11ef-8672-fc5ceea01bf6', '(215) 555-0297'),
+       ('d65abbfa-60bd-11ef-8672-fc5ceea01bf6', '(713) 555-0540'),
+       ('d65abcd0-60bd-11ef-8672-fc5ceea01bf6', '(216) 555-0726'),
+       ('d65abd55-60bd-11ef-8672-fc5ceea01bf6', '(505) 555-0623'),
+       ('d65abdbb-60bd-11ef-8672-fc5ceea01bf6', '(503) 555-0387'),
+       ('d65abe1f-60bd-11ef-8672-fc5ceea01bf6', '(813) 555-0839');
 
 -- select * from Contacts_Phones;
 
