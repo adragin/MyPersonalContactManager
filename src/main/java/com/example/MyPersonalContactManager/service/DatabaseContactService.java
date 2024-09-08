@@ -2,7 +2,6 @@ package com.example.MyPersonalContactManager.service;
 
 import com.example.MyPersonalContactManager.models.ContactModels.Contact;
 import com.example.MyPersonalContactManager.models.ContactModels.ContactDTO;
-import com.example.MyPersonalContactManager.models.ContactModels.ContactDTOBig;
 import com.example.MyPersonalContactManager.models.ContactModels.Phone;
 import com.example.MyPersonalContactManager.repository.ContactRepositoryInterface;
 import com.example.MyPersonalContactManager.repository.DatabaseContactRepository;
@@ -49,12 +48,7 @@ public class DatabaseContactService implements ContactServiceInterface {
     }
 
     @Override
-    public Contact updateContact(String id, Contact newContact) {
-        return null;
-    }
-
-    @Override
-    public ContactDTOBig updateContact(String contactId, ContactDTOBig newContact) {
+    public ContactDTO updateContact(String contactId, ContactDTO newContact) {
         return dbRepository.updateContact(contactId, newContact);
     }
 

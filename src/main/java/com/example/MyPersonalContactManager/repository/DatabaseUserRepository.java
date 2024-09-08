@@ -10,15 +10,12 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
+//@Primary
 @Repository
 public class DatabaseUserRepository implements InterfaceUserRepository {
 
-    private final JdbcTemplate jdbcTemplate;
-
     @Autowired
-    public DatabaseUserRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
+    private JdbcTemplate jdbcTemplate;
 
     private final RowMapper<User> userRowMapper = (rs, rowNum) -> {
         User user = new User();
@@ -34,7 +31,7 @@ public class DatabaseUserRepository implements InterfaceUserRepository {
 
     @Override
     public User createUser(User user) {
-        String insertSql = "INSERT INTO Users (user_id, user_name, login, password, user_role, create_date, last_update_date) " +
+        String insertSql = "INSERT INTO users (user_id, user_name, login, password, user_role, create_date, last_update_date) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(insertSql,
                 user.getUserId(),

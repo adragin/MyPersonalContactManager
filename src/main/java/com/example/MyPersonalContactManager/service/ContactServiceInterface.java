@@ -13,7 +13,7 @@ public interface ContactServiceInterface {
 
     Contact createContact(Contact contact, String userID);
 
-    Contact updateContact(String id, Contact newContact);
+    ContactDTO updateContact(String id, ContactDTO newContact);
 
     boolean deleteContactById(String id);
 }

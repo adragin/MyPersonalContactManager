@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.example.MyPersonalContactManager.utils.ConstantsContact.DEFAULT_BIRTHDAY;
+import static com.example.MyPersonalContactManager.utils.ConstantsContact.DEFAULT_PHOTO_URL;
 
 @Getter
 @Setter
@@ -43,6 +45,11 @@ public class Contact {
 
     public Contact() {
         this.id = String.valueOf(UUID.randomUUID());
+        try {
+            this.photo = new URL(DEFAULT_PHOTO_URL);
+        } catch (MalformedURLException e) {
+            this.photo = null;
+        }
         this.createDate = LocalDateTime.now();
         this.lastUpdateDate = LocalDateTime.now();
     }

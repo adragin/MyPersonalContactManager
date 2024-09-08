@@ -1,6 +1,7 @@
 package com.example.MyPersonalContactManager.models.UserModels;
 
 import com.example.MyPersonalContactManager.utils.UtilsUserPassword;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -18,6 +19,7 @@ import java.util.UUID;
 @Table(name = "users")
 public class User {
     @Id
+    @Column(name = "user_id")
     private String userId;
     @NotBlank
     private Boolean role; // true->admin, false->user
@@ -45,18 +47,5 @@ public class User {
         this.userName = userName;
         this.createDate = LocalDateTime.now();
         this.lastUpdateDate = LocalDateTime.now();
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "userId=" + userId +
-                ", role=" + role +
-                ", login='" + login + '\'' +
-                ", password='" + password + '\'' +
-                ", user_name='" + userName + '\'' +
-                ", createDate=" + createDate +
-                ", lastUpdateDate=" + lastUpdateDate +
-                '}';
     }
 }

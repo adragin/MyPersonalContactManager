@@ -37,7 +37,7 @@ public class DataBaseUserService implements InterfaceUserService {
         }
 
         if (!utilsRegistration.checkCorrectPassword(userDTORegister.getPassword())) {
-            throw new EasyUserPasswordException("You password is too easy");
+            throw new EasyUserPasswordException("Your password is too easy");
         }
 
         User newUser = new User();
@@ -66,6 +66,7 @@ public class DataBaseUserService implements InterfaceUserService {
         String token = utilsRegistration.generateToken(userDTOLogin.getLogin(), userDTOLogin.getPassword());
         userRepository.saveToken(token, String.valueOf(existingUser.getUserId()));
         return UserDTOResponse.builder()
+                .login(existingUser.getLogin())
                 .token(token)
                 .build();
     }

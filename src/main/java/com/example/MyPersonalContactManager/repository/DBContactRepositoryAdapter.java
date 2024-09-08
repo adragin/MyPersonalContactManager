@@ -1,23 +1,22 @@
 package com.example.MyPersonalContactManager.repository;
 
 import com.example.MyPersonalContactManager.models.ContactModels.Contact;
+import com.example.MyPersonalContactManager.models.ContactModels.ContactDTO;
 import com.example.MyPersonalContactManager.models.UserModels.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Primary
 @Repository
 public class DBContactRepositoryAdapter implements ContactRepositoryInterface {
 
-    private final JPAContactRepository jpaContactRepository;
-    private final JPAUserRepository jpaUserRepository;
-
     @Autowired
-    public DBContactRepositoryAdapter(JPAContactRepository jpaContactRepository, JPAUserRepository jpaUserRepository) {
-        this.jpaContactRepository = jpaContactRepository;
-        this.jpaUserRepository = jpaUserRepository;
-    }
+    private JPAContactRepository jpaContactRepository;
+    @Autowired
+    private JPAUserRepository jpaUserRepository;
 
     @Override
     public Contact createContact(Contact contact, String UserId) {
@@ -43,7 +42,7 @@ public class DBContactRepositoryAdapter implements ContactRepositoryInterface {
     }
 
     @Override
-    public Contact updateContact(String id, Contact newContact) {
+    public ContactDTO updateContact(String id, ContactDTO newContact) {
         return null;
     }
 
