@@ -134,8 +134,8 @@ public class ContactController {
     @DeleteMapping("contacts/delete")
     public ResponseEntity<ResponseAPI> deleteContactById(@RequestHeader("Contact-Id") String contactId,
                                                          @RequestHeader(value = "token", required = false) String token) {
-        ResponseEntity<ResponseAPI> BAD_REQUEST = getResponseAPIResponseEntity(token);
-        if (BAD_REQUEST != null) return BAD_REQUEST;
+        ResponseEntity<ResponseAPI> badRaguest = utilsCheckToken.isTokenCorrect(token);
+        if (badRaguest != null) return badRaguest;
 
         boolean userRole = dbUserService.getUserRoleByToken(token);
         String userId = dbUserService.getUserIdByToken(token);
@@ -151,13 +151,5 @@ public class ContactController {
         }
 
         return ResponseEntity.ok(responseAPI);
-    }
-
-    private ResponseEntity<ResponseAPI> getResponseAPIResponseEntity(String token) {
-        if (token == null || token.isEmpty()) {
-            responseAPI.response = new Error(400, "Authorization header is missing.");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseAPI);
-        }
-        return null;
     }
 }
