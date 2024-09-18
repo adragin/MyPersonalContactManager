@@ -4,7 +4,6 @@ import com.example.MyPersonalContactManager.models.ContactModels.Contact;
 import com.example.MyPersonalContactManager.models.ContactModels.ContactDTO;
 import com.example.MyPersonalContactManager.models.ContactModels.Phone;
 import com.example.MyPersonalContactManager.repository.ContactRepositoryInterface;
-import com.example.MyPersonalContactManager.repository.DatabaseContactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,12 +12,8 @@ import java.util.List;
 @Component
 public class DatabaseContactService implements ContactServiceInterface {
 
-    private ContactRepositoryInterface dbRepository;
-
     @Autowired
-    public DatabaseContactService(DatabaseContactRepository dbRepository) {
-        this.dbRepository = dbRepository;
-    }
+    private ContactRepositoryInterface dbRepository;
 
     @Override
     public ContactDTO getContactByContactId(String contactId) {

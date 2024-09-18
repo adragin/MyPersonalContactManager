@@ -3,13 +3,11 @@ package com.example.MyPersonalContactManager.service;
 import com.example.MyPersonalContactManager.exceptions.EasyUserPasswordException;
 import com.example.MyPersonalContactManager.exceptions.InvalidLoginPasswordException;
 import com.example.MyPersonalContactManager.exceptions.UserAlreadyExistsException;
-import com.example.MyPersonalContactManager.models.UserModels.User;
-import com.example.MyPersonalContactManager.models.UserModels.UserDTOLogin;
-import com.example.MyPersonalContactManager.models.UserModels.UserDTORegister;
-import com.example.MyPersonalContactManager.models.UserModels.UserDTOResponse;
+import com.example.MyPersonalContactManager.models.UserModels.*;
 import com.example.MyPersonalContactManager.repository.InterfaceUserRepository;
 import com.example.MyPersonalContactManager.utils.UtilsRegistration;
 import com.example.MyPersonalContactManager.utils.UtilsUserAuthorization;
+import com.example.MyPersonalContactManager.utils.UtilsUserPassword;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,13 +40,19 @@ public class DataBaseUserService implements InterfaceUserService {
 
         User newUser = new User();
         newUser.setLogin(userDTORegister.getLogin());
-        newUser.setPassword(userDTORegister.getPassword());
+        newUser.setPassword(UtilsUserPassword.hashPassword(userDTORegister.getPassword()));
         newUser.setUserName(userDTORegister.getName());
         newUser.setRole(false);
 
-        userRepository.createUser(newUser);
+        UserToken userToken = new UserToken();
+        newUser.setUserToken(userToken);
+        userToken.setUser(newUser);
 
         String token = generateToken(newUser.getLogin(), newUser.getPassword());
+
+        userRepository.createUser(newUser);
+//        newUser.getUserToken().setToken(token);
+
         userRepository.saveToken(token, String.valueOf(newUser.getUserId()));
         return UserDTOResponse.builder()
                 .login(newUser.getLogin())
@@ -102,7 +106,7 @@ public class DataBaseUserService implements InterfaceUserService {
     }
 
     @Override
-    public boolean getUserRoleByToken(String token) {
+    public boolean isAdmin(String token) {
         return userRepository.getUserRoleByToken(token);
     }
 }

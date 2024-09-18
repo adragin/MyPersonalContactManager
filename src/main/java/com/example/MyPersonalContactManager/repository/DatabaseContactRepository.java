@@ -55,7 +55,7 @@ public class DatabaseContactRepository implements ContactRepositoryInterface {
 
     private final RowMapper<Phone> phoneRowMapper = (rs, rowNum) -> {
         Phone phone = new Phone();
-        phone.setContactId(rs.getString("contact_id"));
+//        phone.setContactId(rs.getString("contact_id"));
         phone.setPhoneNumber(rs.getString("phone_number"));
         return phone;
     };

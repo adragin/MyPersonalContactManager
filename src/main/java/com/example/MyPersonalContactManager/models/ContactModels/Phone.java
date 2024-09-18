@@ -1,6 +1,5 @@
 package com.example.MyPersonalContactManager.models.ContactModels;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -14,8 +13,8 @@ import lombok.Setter;
 @Entity
 @Table(name = "contacts_phones")
 public class Phone {
-    @Column(name = "contact_id")
-    private String contactId;
+    //    @Column(name = "contact_id")
+//    private String contactId;
     @Id
     private String phoneNumber;
 

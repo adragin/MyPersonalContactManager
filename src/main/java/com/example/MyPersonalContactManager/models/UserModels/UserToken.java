@@ -1,8 +1,7 @@
 package com.example.MyPersonalContactManager.models.UserModels;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,9 +14,13 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "users_token")
 public class UserToken {
-    private String token;
     @Id
-    private String userId;
+    @Column(name = "token")
+    private String token;
+    @JsonBackReference
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    private User user;
     private LocalDateTime createDate;
     private LocalDateTime lastUpdateDate;
 }

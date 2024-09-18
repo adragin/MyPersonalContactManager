@@ -43,11 +43,19 @@ public class DBContactRepositoryAdapter implements ContactRepositoryInterface {
 
     @Override
     public ContactDTO updateContact(String id, ContactDTO newContact) {
+//        if (jpaContactRepository.existsById(id)) {
+//            jpaContactRepository.save();
+//            return ;
+//        }
         return null;
     }
 
     @Override
     public boolean deleteContactById(String id) {
+        if (jpaContactRepository.existsById(id)) {
+            jpaContactRepository.deleteById(id);
+            return true;
+        }
         return false;
     }
 

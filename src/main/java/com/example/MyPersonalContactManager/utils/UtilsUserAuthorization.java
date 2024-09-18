@@ -13,7 +13,7 @@ public class UtilsUserAuthorization {
             return false;
         }
 
-        if (existingUser.getPassword().equals(userLogin.getPassword()) &&
+        if (existingUser.getPassword().equals(UtilsUserPassword.hashPassword(userLogin.getPassword())) &&
                 (existingUser.getLogin().equals(userLogin.getLogin()))) {
 
             return true;

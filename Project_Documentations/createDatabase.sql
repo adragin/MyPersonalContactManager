@@ -19,7 +19,7 @@ CREATE TABLE users
   user_id          varchar(36) primary key, -- добавлен PK
   user_role        boolean check (user_role in (0, 1)) not null,
   login            varchar(128)                        not null unique,
-  password         varchar(50)                         not null,
+  password         varchar(64)                         not null,
   user_name        varchar(36)                         not null,
   create_date      TIMESTAMP,
   last_update_date TIMESTAMP
@@ -37,12 +37,16 @@ VALUES ('4b3b85f1-1a3e-4c29-9b59-74c891b4b35d', 'Alex Doe', 'alexdoe@example.com
 -- Создание таблицы Users_Token
 CREATE TABLE users_token
 (
-  token            varchar(256) unique,
-  user_id          varchar(36), -- FK -> Users (User_Id)
+  token            varchar(256) PRIMARY KEY,
+  user_id          varchar(36), -- FK -> Users (user_id)
   create_date      TIMESTAMP,
   last_update_date TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES Users (user_id)
+  FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
 );
+
+-- для каскадного удаления token'ов после удаления user, если таблица уже создана и не хотите удалять данные
+ALTER TABLE users_token
+  ADD CONSTRAINT users_token_fk FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE;
 
 -- Тестовая запись Users_Token
 INSERT INTO Users_Token (token, user_id, create_date, last_update_date)

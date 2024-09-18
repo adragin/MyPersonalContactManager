@@ -18,11 +18,4 @@ public class UserDTOLogin {
         this.login = login;
         this.password = password;
     }
-
-    @Override
-    public String toString() {
-        return "UserDTOLogin{" +
-                "login='" + login + '\'' +
-                '}';
-    }
 }

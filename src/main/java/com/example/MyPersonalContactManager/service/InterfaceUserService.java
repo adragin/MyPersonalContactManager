@@ -25,7 +25,7 @@ public interface InterfaceUserService {
 
     String getUserIdByToken(String token);
 
-    boolean getUserRoleByToken(String token);
+    boolean isAdmin(String token);
 }
 
 

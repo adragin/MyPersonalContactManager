@@ -22,13 +22,4 @@ public class UserDTORegister {
         this.password = password;
         this.name = name;
     }
-
-    @Override
-    public String toString() {
-        return "UserDTORegister{" +
-                "login='" + login + '\'' +
-                ", name='" + name + '\'' +
-                ", password='" + password + '\'' +
-                '}';
-    }
 }

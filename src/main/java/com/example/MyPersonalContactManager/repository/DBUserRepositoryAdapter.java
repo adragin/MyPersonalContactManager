@@ -12,60 +12,60 @@ import java.util.List;
 public class DBUserRepositoryAdapter implements InterfaceUserRepository {
 
     @Autowired
-    private
+    private InterfaceUserRepository userRepository;
 
     @Override
     public User createUser(User user) {
-        return;
+        return userRepository.createUser(user);
     }
 
     @Override
     public User getUserById(String userId) {
-        return null;
+        return userRepository.getUserById(userId);
     }
 
     @Override
     public User getUserByLogin(String login) {
-        return null;
+        return userRepository.getUserByLogin(login);
     }
 
     @Override
     public List<User> getAllUsers() {
-        return List.of();
+        return userRepository.getAllUsers();
     }
 
     @Override
     public String getUserIdByToken(String token) {
-        return "";
+        return userRepository.getUserIdByToken(token);
     }
 
     @Override
     public boolean getUserRoleByToken(String token) {
-        return false;
+        return userRepository.getUserRoleByToken(token);
     }
 
     @Override
     public User updateUser(User user) {
-        return null;
+        return userRepository.updateUser(user);
     }
 
     @Override
     public User setUserRoleById(String userId, boolean role) {
-        return null;
+        return userRepository.setUserRoleById(userId, role);
     }
 
     @Override
     public boolean deleteUserById(String userId) {
-        return false;
+        return userRepository.deleteUserById(userId);
     }
 
     @Override
     public String getToken(String userId) {
-        return "";
+        return userRepository.getToken(userId);
     }
 
     @Override
     public void saveToken(String token, String userId) {
-
+        userRepository.saveToken(token, userId);
     }
 }

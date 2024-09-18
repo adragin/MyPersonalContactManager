@@ -1,10 +1,8 @@
 package com.example.MyPersonalContactManager.models.UserModels;
 
 import com.example.MyPersonalContactManager.utils.UtilsUserPassword;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,6 +30,10 @@ public class User {
     private String userName; // FullName or FirstName
     private LocalDateTime createDate;
     private LocalDateTime lastUpdateDate;
+
+    @OneToOne(fetch = FetchType.EAGER, mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private UserToken userToken;
 
     public User() {
         this.userId = String.valueOf(UUID.randomUUID());
